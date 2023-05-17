@@ -1,0 +1,8 @@
+{
+    "name": "archielite/shorturl",
+    "description": "",
+    "type": "botble-plugin",
+    "require": {
+        "geoip2/geoip2": "^v2.13.0"
+    }
+}
