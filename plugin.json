@@ -5,5 +5,6 @@
     "author": "Archi Elite",
     "url": "https://archielite.com",
     "version": "1.0.0",
-    "description": "ShortURL is a url shortener to reduce a long link"
+    "description": "ShortURL is a url shortener to reduce a long link",
+    "minimum_core_version": "6.5.5"
 }
