@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Models;
+namespace ArchiElite\UrlShortener\Models;
 
 use Botble\Base\Models\BaseModel;
 use Carbon\Carbon;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Analytics extends BaseModel
 {
-    protected $table = 'analytics';
+    protected $table = 'short_url_analytics';
 
     protected $fillable = [
         'short_url',

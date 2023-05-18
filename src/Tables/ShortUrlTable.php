@@ -1,11 +1,11 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Tables;
+namespace ArchiElite\UrlShortener\Tables;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Facades\BaseHelper;
-use ArchiElite\ShortUrl\Models\Analytics;
-use ArchiElite\ShortUrl\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Models\Analytics;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use Collective\Html\HtmlFacade as Html;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -26,10 +26,10 @@ class ShortUrlTable extends TableAbstract
     public function __construct(DataTables $table, UrlGenerator $urlGenerator, ShortUrlInterface $shortUrlRepository)
     {
         $this->repository = $shortUrlRepository;
-        $this->setOption('id', 'table-plugins-short_url');
+        $this->setOption('id', 'table-plugins-url_shortener');
         parent::__construct($table, $urlGenerator);
 
-        if (! Auth::user()->hasAnyPermission(['short_url.edit', 'short_url.destroy'])) {
+        if (! Auth::user()->hasAnyPermission(['url_shortener.edit', 'url_shortener.destroy'])) {
             $this->hasOperations = false;
             $this->hasActions = false;
         }
@@ -40,11 +40,11 @@ class ShortUrlTable extends TableAbstract
         $data = $this->table
             ->eloquent($this->query())
             ->editColumn('long_url', function ($item) {
-                if (! Auth::user()->hasPermission('short_url.edit')) {
+                if (! Auth::user()->hasPermission('url_shortener.edit')) {
                     return Str::limit($item->long_url, 25);
                 }
 
-                return Html::link(route('short_url.edit', $item->id), Str::limit($item->long_url, 25));
+                return Html::link(route('url_shortener.edit', $item->id), Str::limit($item->long_url, 25));
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
@@ -53,7 +53,7 @@ class ShortUrlTable extends TableAbstract
                 return number_format(Analytics::getClicks($item->short_url));
             })
             ->editColumn('short_url', function ($item) {
-                return Html::link(route('short_url.go', $item->short_url), $item->short_url);
+                return Html::link(route('url_shortener.go', $item->short_url), $item->short_url);
             })
             ->editColumn('created_at', function ($item) {
                 return BaseHelper::formatDate($item->created_at);
@@ -63,12 +63,12 @@ class ShortUrlTable extends TableAbstract
             })
             ->addColumn('operations', function ($item) {
                 $extra = Html::link(
-                    route('short_url.analytics', $item->short_url),
+                    route('url_shortener.analytics', $item->short_url),
                     __('Analytics'),
                     ['class' => 'btn btn-info']
                 )->toHtml();
 
-                return $this->getOperations('short_url.edit', 'short_url.destroy', $item, $extra);
+                return $this->getOperations('url_shortener.edit', 'url_shortener.destroy', $item, $extra);
             });
 
         return $this->toJson($data);
@@ -128,12 +128,12 @@ class ShortUrlTable extends TableAbstract
 
     public function buttons(): array
     {
-        return $this->addCreateButton(route('short_url.create'), 'short_url.create');
+        return $this->addCreateButton(route('url_shortener.create'), 'url_shortener.create');
     }
 
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('short_url.deletes'), 'short_url.destroy', parent::bulkActions());
+        return $this->addDeleteAction(route('url_shortener.deletes'), 'url_shortener.destroy', parent::bulkActions());
     }
 
     public function getBulkChanges(): array

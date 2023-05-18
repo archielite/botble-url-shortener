@@ -8,7 +8,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('short_urls', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->timestamps();
             $table->string('long_url', 255);
             $table->string('short_url', 30);
@@ -17,7 +17,7 @@ return new class () extends Migration {
         });
 
         Schema::create('analytics', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('short_url', 30);
             $table->tinyInteger('click')->nullable()->default(0);
             $table->tinyInteger('real_click')->nullable()->default(0);

@@ -1,9 +1,9 @@
 {
-    "name": "Short URL",
-    "namespace": "ArchiElite\\ShortUrl\\",
-    "provider": "ArchiElite\\ShortUrl\\Providers\\ShortUrlServiceProvider",
-    "author": "ArchiElite Technologies",
+    "name": "URL Shortener",
+    "namespace": "ArchiElite\\UrlShortener\\",
+    "provider": "ArchiElite\\UrlShortener\\Providers\\ShortUrlServiceProvider",
+    "author": "Archi Elite",
     "url": "https://archielite.com",
-    "version": "1.0",
+    "version": "1.0.0",
     "description": "ShortURL is a url shortener to reduce a long link"
 }

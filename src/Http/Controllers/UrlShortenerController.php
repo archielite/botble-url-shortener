@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Http\Controllers;
+namespace ArchiElite\UrlShortener\Http\Controllers;
 
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Base\Events\CreatedContentEvent;
@@ -9,16 +9,16 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Forms\FormBuilder;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
-use ArchiElite\ShortUrl\Forms\ShortUrlForm;
-use ArchiElite\ShortUrl\Http\Requests\ShortUrlRequest;
-use ArchiElite\ShortUrl\Models\ShortUrl;
-use ArchiElite\ShortUrl\Repositories\Interfaces\ShortUrlInterface;
-use ArchiElite\ShortUrl\Tables\ShortUrlTable;
+use ArchiElite\UrlShortener\Forms\ShortUrlForm;
+use ArchiElite\UrlShortener\Http\Requests\ShortUrlRequest;
+use ArchiElite\UrlShortener\Models\ShortUrl;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Tables\ShortUrlTable;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class ShortUrlController extends BaseController
+class UrlShortenerController extends BaseController
 {
     public function __construct(protected ShortUrlInterface $shortUrlRepository)
     {
@@ -26,14 +26,14 @@ class ShortUrlController extends BaseController
 
     public function index(ShortUrlTable $table)
     {
-        page_title()->setTitle(trans('plugins/short-url::short-url.name'));
+        page_title()->setTitle(trans('plugins/url-shortener::url-shortener.name'));
 
         return $table->renderTable();
     }
 
     public function create(FormBuilder $formBuilder)
     {
-        page_title()->setTitle(trans('plugins/short-url::short-url.create'));
+        page_title()->setTitle(trans('plugins/url-shortener::url-shortener.create'));
 
         return $formBuilder->create(ShortUrlForm::class)->renderForm();
     }
@@ -57,8 +57,8 @@ class ShortUrlController extends BaseController
         event(new CreatedContentEvent(SHORT_URL_MODULE_SCREEN_NAME, $request, $shortUrl));
 
         return $response
-            ->setPreviousUrl(route('short_url.index'))
-            ->setNextUrl(route('short_url.edit', $shortUrl->id))
+            ->setPreviousUrl(route('url_shortener.index'))
+            ->setNextUrl(route('url_shortener.edit', $shortUrl->id))
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
 
@@ -68,7 +68,7 @@ class ShortUrlController extends BaseController
 
         event(new BeforeEditContentEvent($request, $shortUrl));
 
-        page_title()->setTitle(trans('plugins/short-url::short-url.edit') . ' "' . $shortUrl->short_url . '"');
+        page_title()->setTitle(trans('plugins/url-shortener::url-shortener.edit') . ' "' . $shortUrl->short_url . '"');
 
         return $formBuilder->create(ShortUrlForm::class, ['model' => $shortUrl])->renderForm();
     }
@@ -81,7 +81,7 @@ class ShortUrlController extends BaseController
         if (empty($shortUrl)) {
             do {
                 $shortUrl = Str::random(6);
-            } while (ShortUrl::where('short_url', $shortUrl)->where('id', '!=', $url->id)->first());
+            } while (ShortUrl::where('short_url', $shortUrl)->where('id', '!=', $url->id)->exists());
         }
 
         $url->fill([
@@ -95,7 +95,7 @@ class ShortUrlController extends BaseController
         event(new UpdatedContentEvent(SHORT_URL_MODULE_SCREEN_NAME, $request, $url));
 
         return $response
-            ->setPreviousUrl(route('short_url.index'))
+            ->setPreviousUrl(route('url_shortener.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
     }
 

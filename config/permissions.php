@@ -2,22 +2,22 @@
 
 return [
     [
-        'name' => 'Short Url',
-        'flag' => 'short_url.index',
+        'name' => 'Short URL',
+        'flag' => 'url_shortener.index',
     ],
     [
         'name' => 'Create',
-        'flag' => 'short_url.create',
-        'parent_flag' => 'short_url.index',
+        'flag' => 'url_shortener.create',
+        'parent_flag' => 'url_shortener.index',
     ],
     [
         'name' => 'Edit',
-        'flag' => 'short_url.edit',
-        'parent_flag' => 'short_url.index',
+        'flag' => 'url_shortener.edit',
+        'parent_flag' => 'url_shortener.index',
     ],
     [
         'name' => 'Delete',
-        'flag' => 'short_url.destroy',
-        'parent_flag' => 'short_url.index',
+        'flag' => 'url_shortener.destroy',
+        'parent_flag' => 'url_shortener.index',
     ],
 ];

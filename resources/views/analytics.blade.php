@@ -1,15 +1,13 @@
-@extends('core/base::layouts.master', ['title' => trans('analytics.show.title') . ' ' . $url ])
+@extends('core/base::layouts.master')
 @section('content')
     <div>
         <div class="card-header d-flex justify-content-between">
-            <h5>{{ __('plugins/short-url::analytics.show.title') }}
-                <a href="{{ route('short_url.go', $url) }}">{{ $url }}</a>
-            </h5>
-            <a href="{{ route('short_url.edit', $shortUrl)  }}"
-               class="btn btn-success d-flex text-center align-items-center">{{ __('plugins/short-url::short-url.edit') }}</a>
+            <h5>{{ trans('plugins/url-shortener::analytics.show.title', ['name' => $url]) }}</h5>
+            <a href="{{ route('url_shortener.edit', $shortUrl)  }}"
+               class="btn btn-success d-flex text-center align-items-center">{{ trans('plugins/url-shortener::url-shortener.edit') }}</a>
         </div>
         <div class="card-body">
-            <p>{{ __('Created :date', ['date' => $creationDate]) }}</p>
+            <p>{{ trans('plugins/url-shortener::analytics.created_at', ['date' => $creationDate]) }}</p>
             <div class="row">
                 <div class="mb-3 widget-item col-md-4">
                     <div class="h-100 bg-white-opacity position-relative">
@@ -20,8 +18,8 @@
                                 </span>
                             </div>
                             <div class="block-content mx-3">
-                                <p class="mb-1">{{ __('plugins/short-url::analytics.click.clicks') }}</p>
-                                <h5>{{$clicks}}</h5>
+                                <p class="mb-1">{{ trans('plugins/url-shortener::analytics.click.clicks') }}</p>
+                                <h5>{{ $clicks }}</h5>
                             </div>
                         </div>
                     </div>
@@ -35,8 +33,8 @@
                                 </span>
                             </div>
                             <div class="block-content mx-3">
-                                <p class="mb-1">{{ __('plugins/short-url::analytics.click.reals') }}</p>
-                                <h5>{{$realClicks}}</h5>
+                                <p class="mb-1">{{ trans('plugins/url-shortener::analytics.click.reals') }}</p>
+                                <h5>{{ $realClicks }}</h5>
                             </div>
                         </div>
                     </div>
@@ -50,8 +48,8 @@
                                 </span>
                             </div>
                             <div class="block-content mx-3">
-                                <p class="mb-1">{{ __('plugins/short-url::analytics.click.today') }}</p>
-                                <h5>{{$todayClicks}}</h5>
+                                <p class="mb-1">{{ trans('plugins/url-shortener::analytics.click.today') }}</p>
+                                <h5>{{ $todayClicks }}</h5>
                             </div>
                         </div>
                     </div>
@@ -60,34 +58,34 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <div class="bg-white p-3">
-                        <h5>{{ __('plugins/short-url::analytics.country.real') }}</h5>
+                        <h5>{{ trans('plugins/url-shortener::analytics.country.real') }}</h5>
                         @if (count($countriesRealViews) > 0)
                             <div class="chart">
                                 <!-- Chart wrapper -->
                                 <canvas id="chart-pie-countries-real"></canvas>
                             </div>
                         @else
-                            <p>{{ __('plugins/short-url::analytics.country.na') }}</p>
+                            <p>{{ trans('plugins/url-shortener::analytics.country.na') }}</p>
                         @endif
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="bg-white p-3">
-                        <h5>{{ __('plugins/short-url::analytics.country.views') }}</h5>
+                        <h5>{{ trans('plugins/url-shortener::analytics.country.views') }}</h5>
                         @if (count($countriesViews) > 0)
                             <div class="chart">
                                 <!-- Chart wrapper -->
                                 <canvas id="chart-pie-countries"></canvas>
                             </div>
                         @else
-                            <p>{{ __('plugins/short-url::analytics.country.na') }}</p>
+                            <p>{{ trans('plugins/url-shortener::analytics.country.na') }}</p>
                         @endif
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-between bg-white pt-3 mb-3" id="referrers-table">
-                <h5 class="px-3">{{ __('plugins/short-url::analytics.referer.referrers') }}</h5>
-                <p class="px-3"> {{ __('plugins/short-url::analytics.referer.list.results', [
+                <h5 class="px-3">{{ trans('plugins/url-shortener::analytics.referer.referrers') }}</h5>
+                <p class="px-3"> {{ trans('plugins/url-shortener::analytics.referer.list.results', [
                             'firstItem' => $referrers->firstItem(),
                             'lastItem' => $referrers->lastItem(),
                             'num' => $referrers->total()
@@ -100,8 +98,8 @@
                         <table class="table align-items-center">
                             <thead class="thead-light">
                             <tr>
-                                <th scope="col">{{ __('url.url') }}</th>
-                                <th scope="col">{{ __('plugins/short-url::analytics.view.reals') }}</th>
+                                <th scope="col">{{ trans('plugins/url-shortener::analytics.url.url') }}</th>
+                                <th scope="col">{{ trans('plugins/url-shortener::analytics.view.reals') }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -124,7 +122,7 @@
                             </tbody>
                         </table>
                     @else
-                        <p>{{ __('plugins/short-url::analytics.referer.na') }}</p>
+                        <p class="pt-3 px-3">{{ trans('plugins/url-shortener::analytics.referer.na') }}</p>
                     @endif
                 </div>
             </div>
@@ -133,8 +131,8 @@
     </div>
 @endsection
 @push('footer')
-    <script src="{{ asset('vendor/core/plugins/short-url/js/chart.js/Chart.bundle.min.js')  }}"></script>
-    <script src="{{ asset('vendor/core/plugins/short-url/js/chart.js/Chart.extension.js')  }}"></script>
+    <script src="{{ asset('vendor/core/plugins/url-shortener/js/chart.js/Chart.bundle.min.js')  }}"></script>
+    <script src="{{ asset('vendor/core/plugins/url-shortener/js/chart.js/Chart.extension.js')  }}"></script>
     <script>'use strict'
 
         var ctx = document.getElementById('chart-pie-countries-real').getContext('2d')

@@ -1,9 +1,9 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Repositories\Eloquent;
+namespace ArchiElite\UrlShortener\Repositories\Eloquent;
 
 use Botble\Support\Repositories\Eloquent\RepositoriesAbstract;
-use ArchiElite\ShortUrl\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
 
 class ShortUrlRepository extends RepositoriesAbstract implements ShortUrlInterface
 {

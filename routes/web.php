@@ -1,21 +1,23 @@
 <?php
 
+use Botble\Base\Facades\BaseHelper;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['namespace' => 'ArchiElite\ShortUrl\Http\Controllers', 'middleware' => 'web'], function () {
-    Route::group(['prefix' => config('core.base.general.admin_dir'), 'middleware' => 'auth'], function () {
-        Route::resource('short-urls', 'ShortUrlController', ['names' => 'short_url']);
+Route::group(['namespace' => 'ArchiElite\UrlShortener\Http\Controllers', 'middleware' => 'web'], function () {
+    Route::group(['prefix' => BaseHelper::getAdminPrefix(), 'middleware' => 'auth'], function () {
 
-        Route::group(['prefix' => 'short-urls'], function () {
+        Route::group(['prefix' => 'url-shortener', 'as' => 'url_shortener.'], function () {
+            Route::resource('', 'UrlShortenerController')->parameters(['' => 'url_shortener']);
+
             Route::delete('items/destroy', [
-                'as' => 'short_url.deletes',
+                'as' => 'deletes',
                 'uses' => 'ShortUrlController@deletes',
-                'permission' => 'short_url.destroy',
+                'permission' => 'url_shortener.destroy',
             ]);
 
-            Route::get('/analytics/{url}', 'AnalyticsController@show')->name('short_url.analytics');
+            Route::get('analytics/{url}', 'AnalyticsController@show')->name('analytics');
         });
     });
 
-    Route::get('/go/{url}', 'AnalyticsController@view')->name('short_url.go');
+    Route::get('go/{url}', 'AnalyticsController@view')->name('url_shortener.go');
 });
