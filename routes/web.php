@@ -14,7 +14,7 @@ Route::group([
 
             Route::delete('items/destroy', [
                 'as' => 'deletes',
-                'uses' => 'ShortUrlController@deletes',
+                'uses' => 'UrlShortenerController@deletes',
                 'permission' => 'url_shortener.destroy',
             ]);
 
