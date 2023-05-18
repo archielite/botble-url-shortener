@@ -1,4 +1,5 @@
 {
+    "id": "archielite/url-shortener",
     "name": "URL Shortener",
     "namespace": "ArchiElite\\UrlShortener\\",
     "provider": "ArchiElite\\UrlShortener\\Providers\\UrlShortenerServiceProvider",

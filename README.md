@@ -1,6 +1,6 @@
 # URL Shortener for Botble CMS
 
-This plugin allows you to create short urls to your Botble CMS site.
+This plugin allows you to create short URLs for your Botble CMS site.
 
 ![](screenshot.png)
 
@@ -12,7 +12,7 @@ This plugin allows you to create short urls to your Botble CMS site.
 
 **Install via Admin Panel**
 
-Go to the **Admin Panel** and click on the **Plugins** tab. Click on the "Add new" button, find the **URL Shortener** plugin and click on the "Install" button.
+Go to the **Admin Panel** and click the **Plugins** tab. Click on the "Add new" button, find the **URL Shortener** plugin, and click on the "Install" button.
 
 **Install manually**
 
