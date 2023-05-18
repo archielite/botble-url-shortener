@@ -1,11 +1,11 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Http\Controllers;
+namespace ArchiElite\ShortenerUrl\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Botble\Base\Enums\BaseStatusEnum;
-use ArchiElite\ShortUrl\Models\Analytics;
-use ArchiElite\ShortUrl\Models\ShortUrl;
+use ArchiElite\ShortenerUrl\Models\Analytics;
+use ArchiElite\ShortenerUrl\Models\ShortUrl;
 use Botble\Base\Facades\PageTitle;
 use Exception;
 use GeoIp2\Database\Reader;
@@ -74,7 +74,7 @@ class AnalyticsController extends Controller
 
     public function show($url)
     {
-        PageTitle::setTitle(trans('plugins/short-url::analytics.show.title', ['name' => $url]));
+        PageTitle::setTitle(trans('plugins/url-shortener::analytics.show.title', ['name' => $url]));
 
         $shortUrl = ShortUrl::where('short_url', $url)->firstOrFail();
 
@@ -93,6 +93,6 @@ class AnalyticsController extends Controller
             'creationDate' => Analytics::getCreationDate($url),
         ];
 
-        return view('plugins/short-url::analytics')->with($data);
+        return view('plugins/url-shortener::analytics')->with($data);
     }
 }

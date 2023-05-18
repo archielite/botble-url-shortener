@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Repositories\Interfaces;
+namespace ArchiElite\ShortenerUrl\Repositories\Interfaces;
 
 use Botble\Support\Repositories\Interfaces\RepositoryInterface;
 

@@ -1,13 +1,14 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Providers;
+namespace ArchiElite\ShortenerUrl\Providers;
 
+use Botble\Base\Facades\DashboardMenu;
 use Botble\Base\Supports\Helper;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
-use ArchiElite\ShortUrl\Models\ShortUrl;
-use ArchiElite\ShortUrl\Repositories\Caches\ShortUrlCacheDecorator;
-use ArchiElite\ShortUrl\Repositories\Eloquent\ShortUrlRepository;
-use ArchiElite\ShortUrl\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\ShortenerUrl\Models\ShortUrl;
+use ArchiElite\ShortenerUrl\Repositories\Caches\ShortUrlCacheDecorator;
+use ArchiElite\ShortenerUrl\Repositories\Eloquent\ShortUrlRepository;
+use ArchiElite\ShortenerUrl\Repositories\Interfaces\ShortUrlInterface;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\ServiceProvider;
@@ -27,7 +28,7 @@ class ShortUrlServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->setNamespace('plugins/short-url')
+        $this->setNamespace('plugins/url-shortener')
             ->loadAndPublishConfigurations(['permissions'])
             ->loadMigrations()
             ->loadAndPublishViews()
@@ -36,14 +37,14 @@ class ShortUrlServiceProvider extends ServiceProvider
             ->publishAssets();
 
         Event::listen(RouteMatched::class, function () {
-            dashboard_menu()->registerItem([
-                'id' => 'cms-plugins-short_url',
+            DashboardMenu::registerItem([
+                'id' => 'cms-plugins-url_shortener',
                 'priority' => 5,
                 'parent_id' => null,
-                'name' => 'plugins/short-url::short-url.name',
+                'name' => 'plugins/url-shortener::url-shortener.name',
                 'icon' => 'fas fa-link',
-                'url' => route('short_url.index'),
-                'permissions' => ['short_url.index'],
+                'url' => route('url_shortener.index'),
+                'permissions' => ['url_shortener.index'],
             ]);
         });
     }

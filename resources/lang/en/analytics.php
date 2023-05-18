@@ -22,7 +22,7 @@ return [
         ],
     'show' =>
         [
-            'title' => 'Analytics for Short URL :name',
+            'title' => 'Analytics for Short URL ":name"',
         ],
     'country' =>
         [
@@ -40,6 +40,8 @@ return [
     'url' =>
         [
             'created' => 'Short URLs created',
+            'url' => 'URL'
         ],
     'analytics' => 'Analytics',
+    'created_at' => 'Created :date',
 ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Models;
+namespace ArchiElite\ShortenerUrl\Models;
 
 use Botble\Base\Models\BaseModel;
 use Carbon\Carbon;

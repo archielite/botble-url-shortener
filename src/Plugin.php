@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchiElite\ShortUrl;
+namespace ArchiElite\ShortenerUrl;
 
 use Botble\PluginManagement\Abstracts\PluginOperationAbstract;
 use Illuminate\Support\Facades\Schema;

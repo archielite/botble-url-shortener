@@ -1,7 +1,7 @@
 {
     "name": "URL Shortener",
-    "namespace": "ArchiElite\\ShortUrl\\",
-    "provider": "ArchiElite\\ShortUrl\\Providers\\ShortUrlServiceProvider",
+    "namespace": "ArchiElite\\ShortenerUrl\\",
+    "provider": "ArchiElite\\ShortenerUrl\\Providers\\ShortUrlServiceProvider",
     "author": "Archi Elite",
     "url": "https://archielite.com",
     "version": "1.0.0",

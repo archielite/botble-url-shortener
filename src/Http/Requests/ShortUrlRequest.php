@@ -1,16 +1,24 @@
 <?php
 
-namespace ArchiElite\ShortUrl\Http\Requests;
+namespace ArchiElite\ShortenerUrl\Http\Requests;
 
+use ArchiElite\ShortenerUrl\Models\ShortUrl;
 use Botble\Support\Http\Requests\Request;
+use Illuminate\Validation\Rule;
 
 class ShortUrlRequest extends Request
 {
     public function rules(): array
     {
         return [
-            'long_url' => 'required|max:255|url',
-            'short_url' => 'nullable|min:4|max:15|regex:/^(?=[^ ])[A-Za-z0-9-_]+$/|unique:short_urls,short_url,' . $this->route('short_url'),
+            'long_url' => ['required', 'url', 'max:255'],
+            'short_url' => [
+                'nullable',
+                'min:4',
+                'max:15',
+                'regex:/^(?=[^ ])[A-Za-z0-9-_]+$/',
+                Rule::unique(ShortUrl::class, 'short_url')->ignore($this->route('url_shortener')),
+            ],
         ];
     }
 }
