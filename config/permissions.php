@@ -20,4 +20,9 @@ return [
         'flag' => 'url_shortener.destroy',
         'parent_flag' => 'url_shortener.index',
     ],
+    [
+        'name' => 'Analytics',
+        'flag' => 'url_shortener.analytics',
+        'parent_flag' => 'url_shortener.index',
+    ],
 ];

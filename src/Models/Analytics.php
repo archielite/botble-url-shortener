@@ -99,6 +99,7 @@ class Analytics extends BaseModel
             foreach (['r', 'g', 'b'] as $color) {
                 $rgbColor[$color] = mt_rand(0, 255);
             }
+
             $countriesColor[] = $rgbColor['r'] . ', ' . $rgbColor['g'] . ', ' . $rgbColor['b'];
         }
 
@@ -107,9 +108,13 @@ class Analytics extends BaseModel
 
     public static function getCreationDate($url)
     {
-        $creationDate = ShortUrl::where('short_url', $url)
+        $creationDate = UrlShortener::where('short_url', $url)
             ->select('created_at')
             ->first('created_at');
+
+        if (! $creationDate) {
+            return null;
+        }
 
         return $creationDate->created_at->diffForHumans();
     }

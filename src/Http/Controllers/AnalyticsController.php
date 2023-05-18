@@ -5,17 +5,19 @@ namespace ArchiElite\UrlShortener\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Botble\Base\Enums\BaseStatusEnum;
 use ArchiElite\UrlShortener\Models\Analytics;
-use ArchiElite\UrlShortener\Models\ShortUrl;
+use ArchiElite\UrlShortener\Models\UrlShortener;
+use Botble\Base\Facades\Assets;
 use Botble\Base\Facades\PageTitle;
 use Exception;
 use GeoIp2\Database\Reader;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class AnalyticsController extends Controller
 {
     public function view($url, Request $request)
     {
-        $result = ShortUrl::where('short_url', $url)->where('status', BaseStatusEnum::PUBLISHED)->first();
+        $result = UrlShortener::where('short_url', $url)->where('status', BaseStatusEnum::PUBLISHED)->first();
 
         if (! $result) {
             return redirect()->route('public.index');
@@ -58,6 +60,13 @@ class AnalyticsController extends Controller
         // If it fails, because GeoLite2 doesn't know the IP country, we
         // will set it to Unknown
         try {
+            if (
+                ! class_exists('GeoIp2\Database\Reader') &&
+                File::exists($filePath = __DIR__ . '/../../../vendor/autoload.php')
+            ) {
+                require $filePath;
+
+            }
             $reader = new Reader(__DIR__ . '/../../../database/GeoLite2-Country.mmdb');
             $record = $reader->country($ip);
             $countryCode = $record->country->isoCode;
@@ -76,7 +85,7 @@ class AnalyticsController extends Controller
     {
         PageTitle::setTitle(trans('plugins/url-shortener::analytics.show.title', ['name' => $url]));
 
-        $shortUrl = ShortUrl::where('short_url', $url)->firstOrFail();
+        $shortUrl = UrlShortener::where('short_url', $url)->firstOrFail();
 
         $countriesViews = Analytics::getCountriesViews($url);
 
@@ -92,6 +101,11 @@ class AnalyticsController extends Controller
             'referrers' => Analytics::getReferrers($url),
             'creationDate' => Analytics::getCreationDate($url),
         ];
+
+        Assets::addScriptsDirectly([
+            'vendor/core/plugins/url-shortener/js/chart.js/Chart.bundle.min.js',
+            'vendor/core/plugins/url-shortener/js/chart.js/Chart.extension.js',
+        ]);
 
         return view('plugins/url-shortener::analytics')->with($data);
     }

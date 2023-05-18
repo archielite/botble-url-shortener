@@ -61,7 +61,6 @@
                         <h5>{{ trans('plugins/url-shortener::analytics.country.real') }}</h5>
                         @if (count($countriesRealViews) > 0)
                             <div class="chart">
-                                <!-- Chart wrapper -->
                                 <canvas id="chart-pie-countries-real"></canvas>
                             </div>
                         @else
@@ -74,7 +73,6 @@
                         <h5>{{ trans('plugins/url-shortener::analytics.country.views') }}</h5>
                         @if (count($countriesViews) > 0)
                             <div class="chart">
-                                <!-- Chart wrapper -->
                                 <canvas id="chart-pie-countries"></canvas>
                             </div>
                         @else
@@ -131,72 +129,69 @@
     </div>
 @endsection
 @push('footer')
-    <script src="{{ asset('vendor/core/plugins/url-shortener/js/chart.js/Chart.bundle.min.js')  }}"></script>
-    <script src="{{ asset('vendor/core/plugins/url-shortener/js/chart.js/Chart.extension.js')  }}"></script>
-    <script>'use strict'
+    <script>
+        'use strict'
 
-        var ctx = document.getElementById('chart-pie-countries-real').getContext('2d')
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    @foreach ($countriesRealViews as $country => $value)
-                        '{{$country}}',
-                    @endforeach
-                ],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [
+        $(document).ready(function() {
+            new Chart(document.getElementById('chart-pie-countries-real').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: [
                         @foreach ($countriesRealViews as $country => $value)
-                                {{$value}},
+                            '{{ $country }}',
                         @endforeach
                     ],
-                    backgroundColor: [
-                        @foreach ($countriesColor as $color)
-                            'rgba({{$color}}, 0.5)',
-                        @endforeach
-                    ],
-                    borderColor: [
-                        @foreach ($countriesColor as $color)
-                            'rgba({{$color}}, 1)',
-                        @endforeach
-                    ],
-                    borderWidth: 1,
-                }],
-            },
-        })
-    </script>
-    <script>'use strict'
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [
+                            @foreach ($countriesRealViews as $country => $value)
+                                {{ $value }},
+                            @endforeach
+                        ],
+                        backgroundColor: [
+                            @foreach ($countriesColor as $color)
+                                'rgba({{ $color }}, 0.5)',
+                            @endforeach
+                        ],
+                        borderColor: [
+                            @foreach ($countriesColor as $color)
+                                'rgba({{ $color }}, 1)',
+                            @endforeach
+                        ],
+                        borderWidth: 1,
+                    }],
+                },
+            });
 
-        var ctx = document.getElementById('chart-pie-countries').getContext('2d')
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    @foreach ($countriesViews as $country => $value)
-                        '{{$country}}',
-                    @endforeach
-                ],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [
+            new Chart(document.getElementById('chart-pie-countries').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: [
                         @foreach ($countriesViews as $country => $value)
-                                {{$value}},
+                            '{{ $country }}',
                         @endforeach
                     ],
-                    backgroundColor: [
-                        @foreach ($countriesColor as $color)
-                            'rgba({{$color}}, 0.5)',
-                        @endforeach
-                    ],
-                    borderColor: [
-                        @foreach ($countriesColor as $color)
-                            'rgba({{$color}}, 1)',
-                        @endforeach
-                    ],
-                    borderWidth: 1,
-                }],
-            },
-        })
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [
+                            @foreach ($countriesViews as $country => $value)
+                                {{ $value }},
+                            @endforeach
+                        ],
+                        backgroundColor: [
+                            @foreach ($countriesColor as $color)
+                                'rgba({{ $color }}, 0.5)',
+                            @endforeach
+                        ],
+                        borderColor: [
+                            @foreach ($countriesColor as $color)
+                                'rgba({{ $color }}, 1)',
+                            @endforeach
+                        ],
+                        borderWidth: 1,
+                    }],
+                },
+            });
+        });
     </script>
 @endpush

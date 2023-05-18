@@ -24,7 +24,7 @@ return new class () extends Migration {
             $table->char('country', 10)->nullable()->default(0);
             $table->string('country_full', 50)->nullable()->default(0);
             $table->string('referer', 300)->nullable();
-            $table->string('ip_address', 300)->default(0);
+            $table->string('ip_address', 39)->default(0);
             $table->timestamps();
         });
     }
