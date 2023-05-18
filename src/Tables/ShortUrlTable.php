@@ -1,11 +1,11 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Tables;
+namespace ArchiElite\UrlShortener\Tables;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Facades\BaseHelper;
-use ArchiElite\ShortenerUrl\Models\Analytics;
-use ArchiElite\ShortenerUrl\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Models\Analytics;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
 use Botble\Table\Abstracts\TableAbstract;
 use Collective\Html\HtmlFacade as Html;
 use Illuminate\Contracts\Routing\UrlGenerator;

@@ -1,9 +1,9 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Repositories\Caches;
+namespace ArchiElite\UrlShortener\Repositories\Caches;
 
 use Botble\Support\Repositories\Caches\CacheAbstractDecorator;
-use ArchiElite\ShortenerUrl\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
 
 class ShortUrlCacheDecorator extends CacheAbstractDecorator implements ShortUrlInterface
 {

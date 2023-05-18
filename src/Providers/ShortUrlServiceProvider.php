@@ -1,14 +1,14 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Providers;
+namespace ArchiElite\UrlShortener\Providers;
 
 use Botble\Base\Facades\DashboardMenu;
 use Botble\Base\Supports\Helper;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
-use ArchiElite\ShortenerUrl\Models\ShortUrl;
-use ArchiElite\ShortenerUrl\Repositories\Caches\ShortUrlCacheDecorator;
-use ArchiElite\ShortenerUrl\Repositories\Eloquent\ShortUrlRepository;
-use ArchiElite\ShortenerUrl\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Models\ShortUrl;
+use ArchiElite\UrlShortener\Repositories\Caches\ShortUrlCacheDecorator;
+use ArchiElite\UrlShortener\Repositories\Eloquent\ShortUrlRepository;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\ServiceProvider;

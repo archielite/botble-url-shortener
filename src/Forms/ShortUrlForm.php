@@ -1,11 +1,11 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Forms;
+namespace ArchiElite\UrlShortener\Forms;
 
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Base\Forms\FormAbstract;
-use ArchiElite\ShortenerUrl\Http\Requests\ShortUrlRequest;
-use ArchiElite\ShortenerUrl\Models\ShortUrl;
+use ArchiElite\UrlShortener\Http\Requests\ShortUrlRequest;
+use ArchiElite\UrlShortener\Models\ShortUrl;
 
 class ShortUrlForm extends FormAbstract
 {

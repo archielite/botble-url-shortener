@@ -1,11 +1,11 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Http\Controllers;
+namespace ArchiElite\UrlShortener\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Botble\Base\Enums\BaseStatusEnum;
-use ArchiElite\ShortenerUrl\Models\Analytics;
-use ArchiElite\ShortenerUrl\Models\ShortUrl;
+use ArchiElite\UrlShortener\Models\Analytics;
+use ArchiElite\UrlShortener\Models\ShortUrl;
 use Botble\Base\Facades\PageTitle;
 use Exception;
 use GeoIp2\Database\Reader;

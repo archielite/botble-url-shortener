@@ -1,8 +1,8 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Http\Requests;
+namespace ArchiElite\UrlShortener\Http\Requests;
 
-use ArchiElite\ShortenerUrl\Models\ShortUrl;
+use ArchiElite\UrlShortener\Models\ShortUrl;
 use Botble\Support\Http\Requests\Request;
 use Illuminate\Validation\Rule;
 

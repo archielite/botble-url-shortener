@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchiElite\ShortenerUrl\Http\Controllers;
+namespace ArchiElite\UrlShortener\Http\Controllers;
 
 use Botble\Base\Events\BeforeEditContentEvent;
 use Botble\Base\Events\CreatedContentEvent;
@@ -9,11 +9,11 @@ use Botble\Base\Events\UpdatedContentEvent;
 use Botble\Base\Forms\FormBuilder;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
-use ArchiElite\ShortenerUrl\Forms\ShortUrlForm;
-use ArchiElite\ShortenerUrl\Http\Requests\ShortUrlRequest;
-use ArchiElite\ShortenerUrl\Models\ShortUrl;
-use ArchiElite\ShortenerUrl\Repositories\Interfaces\ShortUrlInterface;
-use ArchiElite\ShortenerUrl\Tables\ShortUrlTable;
+use ArchiElite\UrlShortener\Forms\ShortUrlForm;
+use ArchiElite\UrlShortener\Http\Requests\ShortUrlRequest;
+use ArchiElite\UrlShortener\Models\ShortUrl;
+use ArchiElite\UrlShortener\Repositories\Interfaces\ShortUrlInterface;
+use ArchiElite\UrlShortener\Tables\ShortUrlTable;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
