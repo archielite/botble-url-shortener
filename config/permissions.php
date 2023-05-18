@@ -2,7 +2,7 @@
 
 return [
     [
-        'name' => 'Short Url',
+        'name' => 'Short URL',
         'flag' => 'short_url.index',
     ],
     [

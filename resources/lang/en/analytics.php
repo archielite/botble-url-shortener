@@ -22,7 +22,7 @@ return [
         ],
     'show' =>
         [
-            'title' => 'Analytics for Short URL',
+            'title' => 'Analytics for Short URL :name',
         ],
     'country' =>
         [

@@ -1,5 +1,5 @@
 {
-    "name": "archielite/shorturl",
+    "name": "archielite/url-shortener",
     "description": "",
     "type": "botble-plugin",
     "require": {

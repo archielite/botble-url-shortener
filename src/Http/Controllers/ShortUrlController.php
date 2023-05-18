@@ -81,7 +81,7 @@ class ShortUrlController extends BaseController
         if (empty($shortUrl)) {
             do {
                 $shortUrl = Str::random(6);
-            } while (ShortUrl::where('short_url', $shortUrl)->where('id', '!=', $url->id)->first());
+            } while (ShortUrl::where('short_url', $shortUrl)->where('id', '!=', $url->id)->exists());
         }
 
         $url->fill([

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Analytics extends BaseModel
 {
-    protected $table = 'analytics';
+    protected $table = 'short_url_analytics';
 
     protected $fillable = [
         'short_url',

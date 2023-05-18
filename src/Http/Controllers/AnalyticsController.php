@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Botble\Base\Enums\BaseStatusEnum;
 use ArchiElite\ShortUrl\Models\Analytics;
 use ArchiElite\ShortUrl\Models\ShortUrl;
+use Botble\Base\Facades\PageTitle;
 use Exception;
 use GeoIp2\Database\Reader;
 use Illuminate\Http\Request;
@@ -14,11 +15,13 @@ class AnalyticsController extends Controller
 {
     public function view($url, Request $request)
     {
-        if ($result = ShortUrl::where('short_url', $url)->where('status', BaseStatusEnum::PUBLISHED)->first()) {
-            $externalUrl = $result['long_url'];
-        } else {
+        $result = ShortUrl::where('short_url', $url)->where('status', BaseStatusEnum::PUBLISHED)->first();
+
+        if (! $result) {
             return redirect()->route('public.index');
         }
+
+        $externalUrl = $result['long_url'];
 
         $ip = $request->ip();
         $referer = $request->server('HTTP_REFERER') ?? null;
@@ -71,6 +74,8 @@ class AnalyticsController extends Controller
 
     public function show($url)
     {
+        PageTitle::setTitle(trans('plugins/short-url::analytics.show.title', ['name' => $url]));
+
         $shortUrl = ShortUrl::where('short_url', $url)->firstOrFail();
 
         $countriesViews = Analytics::getCountriesViews($url);

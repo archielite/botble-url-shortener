@@ -10,6 +10,6 @@ class Plugin extends PluginOperationAbstract
     public static function remove(): void
     {
         Schema::dropIfExists('short_urls');
-        Schema::dropIfExists('analytics');
+        Schema::dropIfExists('short_url_analytics');
     }
 }
