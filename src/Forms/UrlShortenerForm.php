@@ -17,7 +17,7 @@ class UrlShortenerForm extends FormAbstract
             ->withCustomFields()
             ->add('short_url', 'text', [
                 'label' => __('Alias'),
-                'label_attr' => ['class' => 'control-label required'],
+                'required' => true,
                 'attr' => [
                     'placeholder' => __('Ex: botble'),
                     'data-counter' => 15,
@@ -25,7 +25,7 @@ class UrlShortenerForm extends FormAbstract
             ])
             ->add('long_url', 'text', [
                 'label' => __('Target URL'),
-                'label_attr' => ['class' => 'control-label required'],
+                'required' => true,
                 'attr' => [
                     'placeholder' => __('Ex: https://google.com'),
                     'data-counter' => 255,

@@ -22,23 +22,26 @@ class UrlShortenerController extends BaseController
 {
     public function __construct(protected UrlShortenerInterface $shortUrlRepository)
     {
+        $this
+            ->breadcrumb()
+            ->add(trans('plugins/url-shortener::url-shortener.name'), route('url_shortener.index'));
     }
 
     public function index(UrlShortenerTable $table)
     {
-        page_title()->setTitle(trans('plugins/url-shortener::url-shortener.name'));
+        $this->pageTitle(trans('plugins/url-shortener::url-shortener.name'));
 
         return $table->renderTable();
     }
 
-    public function create(FormBuilder $formBuilder)
+    public function create()
     {
-        page_title()->setTitle(trans('plugins/url-shortener::url-shortener.create'));
+        $this->pageTitle(trans('plugins/url-shortener::url-shortener.create'));
 
-        return $formBuilder->create(UrlShortenerForm::class)->renderForm();
+        return UrlShortenerForm::create()->renderForm();
     }
 
-    public function store(UrlShortenerRequest $request, BaseHttpResponse $response)
+    public function store(UrlShortenerRequest $request)
     {
         $shortUrl = $request->input('short_url');
         if (empty($shortUrl)) {
@@ -56,7 +59,8 @@ class UrlShortenerController extends BaseController
 
         event(new CreatedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $shortUrl));
 
-        return $response
+        return $this
+            ->httpResponse()
             ->setPreviousUrl(route('url_shortener.index'))
             ->setNextUrl(route('url_shortener.edit', $shortUrl->id))
             ->setMessage(trans('core/base::notices.create_success_message'));
@@ -68,12 +72,12 @@ class UrlShortenerController extends BaseController
 
         event(new BeforeEditContentEvent($request, $shortUrl));
 
-        page_title()->setTitle(trans('plugins/url-shortener::url-shortener.edit', ['name' => $shortUrl->short_url]));
+        $this->pageTitle(trans('plugins/url-shortener::url-shortener.edit', ['name' => $shortUrl->short_url]));
 
         return $formBuilder->create(UrlShortenerForm::class, ['model' => $shortUrl])->renderForm();
     }
 
-    public function update($id, UrlShortenerRequest $request, BaseHttpResponse $response)
+    public function update($id, UrlShortenerRequest $request)
     {
         $url = $this->shortUrlRepository->findOrFail($id);
 
@@ -94,12 +98,13 @@ class UrlShortenerController extends BaseController
 
         event(new UpdatedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $url));
 
-        return $response
+        return $this
+            ->httpResponse()
             ->setPreviousUrl(route('url_shortener.index'))
             ->setMessage(trans('core/base::notices.update_success_message'));
     }
 
-    public function destroy(Request $request, $id, BaseHttpResponse $response)
+    public function destroy(Request $request, $id)
     {
         try {
             $shortUrl = $this->shortUrlRepository->findOrFail($id);
@@ -108,19 +113,23 @@ class UrlShortenerController extends BaseController
 
             event(new DeletedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $shortUrl));
 
-            return $response->setMessage(trans('core/base::notices.delete_success_message'));
+            return $this
+                ->httpResponse()
+                ->setMessage(trans('core/base::notices.delete_success_message'));
         } catch (Exception) {
-            return $response
+            return $this
+                ->httpResponse()
                 ->setError()
                 ->setMessage(trans('core/base::notices.cannot_delete'));
         }
     }
 
-    public function deletes(Request $request, BaseHttpResponse $response)
+    public function deletes(Request $request)
     {
         $ids = $request->input('ids');
         if (empty($ids)) {
-            return $response
+            return $this
+                ->httpResponse()
                 ->setError()
                 ->setMessage(trans('core/base::notices.no_select'));
         }

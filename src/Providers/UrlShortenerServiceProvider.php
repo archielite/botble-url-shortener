@@ -36,13 +36,13 @@ class UrlShortenerServiceProvider extends ServiceProvider
             ->loadRoutes()
             ->publishAssets();
 
-        Event::listen(RouteMatched::class, function () {
+        DashboardMenu::default()->beforeRetrieving(function () {
             DashboardMenu::registerItem([
                 'id' => 'cms-plugins-url_shortener',
                 'priority' => 5,
                 'parent_id' => null,
                 'name' => 'plugins/url-shortener::url-shortener.name',
-                'icon' => 'fas fa-link',
+                'icon' => 'ti ti-link',
                 'url' => route('url_shortener.index'),
                 'permissions' => ['url_shortener.index'],
             ]);
