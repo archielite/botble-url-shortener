@@ -2,7 +2,6 @@
 
 namespace ArchiElite\UrlShortener\Http\Controllers;
 
-use Botble\Base\Enums\BaseStatusEnum;
 use ArchiElite\UrlShortener\Models\Analytics;
 use ArchiElite\UrlShortener\Models\UrlShortener;
 use Botble\Base\Facades\Assets;
@@ -23,7 +22,10 @@ class AnalyticsController extends BaseController
 
     public function view($url, Request $request)
     {
-        $result = UrlShortener::where('short_url', $url)->where('status', BaseStatusEnum::PUBLISHED)->first();
+        $result = UrlShortener::query()
+            ->wherePublished()
+            ->where('short_url', $url)
+            ->first();
 
         if (! $result) {
             return redirect()->route('public.index');
@@ -91,7 +93,10 @@ class AnalyticsController extends BaseController
     {
         $this->pageTitle(trans('plugins/url-shortener::analytics.show.title', ['name' => $url]));
 
-        $shortUrl = UrlShortener::where('short_url', $url)->firstOrFail();
+        $shortUrl = UrlShortener::query()
+            ->wherePublished()
+            ->where('short_url', $url)
+            ->firstOrFail();
 
         $countriesViews = Analytics::getCountriesViews($url);
 

@@ -4,8 +4,8 @@ namespace ArchiElite\UrlShortener\Tables;
 
 use ArchiElite\UrlShortener\Models\Analytics;
 use ArchiElite\UrlShortener\Models\UrlShortener;
-use ArchiElite\UrlShortener\Tables\Actions\AnalyticAction;
 use Botble\Table\Abstracts\TableAbstract;
+use Botble\Table\Actions\Action;
 use Botble\Table\Actions\DeleteAction;
 use Botble\Table\Actions\EditAction;
 use Botble\Table\BulkActions\DeleteBulkAction;
@@ -29,53 +29,34 @@ class UrlShortenerTable extends TableAbstract
                 IdColumn::make(),
                 LinkableColumn::make('long_url')
                     ->urlUsing(function (LinkableColumn $column) {
-                        $item = $column->getItem();
-
-                        if (! $item) {
-                            return null;
-                        }
-
-                        return route('url_shortener.edit', $item->getKey());
+                        return route('url_shortener.edit', $column->getItem()->getKey());
                     })
                     ->label(trans('plugins/url-shortener::url-shortener.url')),
                 LinkableColumn::make('short_url')
                     ->urlUsing(function (LinkableColumn $column) {
-                        $item = $column->getItem();
-
-                        if (! $item) {
-                            return null;
-                        }
-
-                        return route('url_shortener.go', $item->short_url);
+                        return route('url_shortener.go', $column->getItem()->short_url);
                     })
                     ->label(trans('plugins/url-shortener::url-shortener.name'))
                     ->copyable()
                     ->copyableState(function (LinkableColumn $column) {
-                        $item = $column->getItem();
-
-                        if (! $item) {
-                            return null;
-                        }
-
-                        return route('url_shortener.go', $item->short_url);
-                    })
-                ,
+                        return route('url_shortener.go', $column->getItem()->short_url);
+                    }),
                 FormattedColumn::make('clicks')
                     ->getValueUsing(function (FormattedColumn $column): int {
-                        $item = $column->getItem();
-
-                        if (! $item) {
-                            return 0;
-                        }
-
-                        return Analytics::getClicks($item->short_url);
-                    })
-                ,
+                        return Analytics::getClicks($column->getItem()->short_url);
+                    }),
                 CreatedAtColumn::make(),
                 StatusColumn::make(),
             ])
             ->addActions([
-                AnalyticAction::make(),
+                Action::make('analytics')
+                    ->color('info')
+                    ->icon('ti ti-brand-google-analytics')
+                    ->label(trans('plugins/url-shortener::analytics.analytics'))
+                    ->permission('url_shortener.analytics')
+                    ->url(function (Action $action) {
+                        return route('url_shortener.analytics', $action->getItem()->short_url);
+                    }),
                 EditAction::make()->route('url_shortener.edit'),
                 DeleteAction::make()->route('url_shortener.destroy'),
             ])

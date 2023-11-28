@@ -46,7 +46,7 @@ class Analytics extends BaseModel
             ->select(DB::raw('IFNULL(referer, \'Direct / Unknown\') AS referer'), DB::raw('sum(real_click) as total'))
             ->groupBy('real_click', 'referer')
             ->orderBy('total', 'DESC')
-            ->paginate('20');
+            ->paginate(20);
     }
 
     public static function getClicks($url): int

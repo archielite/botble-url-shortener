@@ -1,10 +1,9 @@
 @extends('core/base::layouts.master')
 @section('content')
     <div>
-        <div class="card-header d-flex justify-content-between">
-            <h5>{{ trans('plugins/url-shortener::analytics.show.title', ['name' => $url]) }}</h5>
+        <div class="card-header d-flex justify-content-end">
             <a href="{{ route('url_shortener.edit', $shortUrl)  }}"
-               class="btn btn-success d-flex text-center align-items-center">{{ trans('plugins/url-shortener::url-shortener.edit') }}</a>
+               class="btn btn-success d-flex text-center align-items-center">{{ trans('plugins/url-shortener::url-shortener.edit', ['name' => $shortUrl->short_url]) }}</a>
         </div>
         <div class="card-body">
             <p>{{ trans('plugins/url-shortener::analytics.created_at', ['date' => $creationDate]) }}</p>

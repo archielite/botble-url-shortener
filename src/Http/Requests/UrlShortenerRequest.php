@@ -16,7 +16,7 @@ class UrlShortenerRequest extends Request
             'short_url' => [
                 'nullable',
                 'min:4',
-                'max:15',
+                'max:30',
                 'regex:/^(?=[^ ])[A-Za-z0-9-_]+$/',
                 Rule::unique(UrlShortener::class, 'short_url')->ignore($this->route('url_shortener')),
             ],

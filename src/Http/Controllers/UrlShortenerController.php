@@ -2,12 +2,12 @@
 
 namespace ArchiElite\UrlShortener\Http\Controllers;
 
-use ArchiElite\UrlShortener\Tables\UrlShortenerTable;
-use Botble\Base\Http\Actions\DeleteResourceAction;
-use Botble\Base\Http\Controllers\BaseController;
 use ArchiElite\UrlShortener\Forms\UrlShortenerForm;
 use ArchiElite\UrlShortener\Http\Requests\UrlShortenerRequest;
 use ArchiElite\UrlShortener\Models\UrlShortener;
+use ArchiElite\UrlShortener\Tables\UrlShortenerTable;
+use Botble\Base\Http\Actions\DeleteResourceAction;
+use Botble\Base\Http\Controllers\BaseController;
 use Illuminate\Support\Str;
 
 class UrlShortenerController extends BaseController
@@ -35,14 +35,16 @@ class UrlShortenerController extends BaseController
 
     public function store(UrlShortenerRequest $request)
     {
-        $form =  UrlShortenerForm::create();
+        $form = UrlShortenerForm::create()->setRequest($request);
 
-        $form->saving(function (UrlShortenerForm $form) use ($request) {
+        $form->saving(function (UrlShortenerForm $form) {
+            $request = $form->getRequest();
+
             $shortUrl = $request->input('short_url');
             if (empty($shortUrl)) {
                 do {
                     $shortUrl = Str::random(6);
-                } while (UrlShortener::where('short_url', $shortUrl)->first());
+                } while (UrlShortener::query()->where('short_url', $shortUrl)->exists());
             }
 
             $data = $form->getRequestData();
@@ -72,12 +74,18 @@ class UrlShortenerController extends BaseController
     public function update(UrlShortener $urlShortener, UrlShortenerRequest $request)
     {
         UrlShortenerForm::createFromModel($urlShortener)
-            ->saving(function (UrlShortenerForm $form) use ($urlShortener, $request) {
+            ->setRequest($request)
+            ->saving(function (UrlShortenerForm $form) use ($urlShortener) {
+                $request = $form->getRequest();
+
                 $shortUrl = $request->input('short_url');
                 if (empty($shortUrl)) {
                     do {
                         $shortUrl = Str::random(6);
-                    } while (UrlShortener::where('short_url', $shortUrl)->where('id', '!=', $urlShortener->id)->exists());
+                    } while (UrlShortener::query()
+                        ->where('short_url', $shortUrl)
+                        ->where('id', '!=', $urlShortener->getKey())
+                        ->exists());
                 }
 
                 $data = $form->getRequestData();
@@ -87,7 +95,7 @@ class UrlShortenerController extends BaseController
                     ->getModel()
                     ->fill($data)
                     ->save();
-        });
+            });
 
         return $this
             ->httpResponse()

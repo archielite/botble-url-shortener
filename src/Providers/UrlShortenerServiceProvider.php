@@ -10,15 +10,10 @@ class UrlShortenerServiceProvider extends ServiceProvider
 {
     use LoadAndPublishDataTrait;
 
-    public function register(): void
-    {
-    }
-
     public function boot(): void
     {
         $this->setNamespace('plugins/url-shortener')
             ->loadAndPublishConfigurations(['permissions'])
-            ->loadHelpers()
             ->loadMigrations()
             ->loadAndPublishViews()
             ->loadAndPublishTranslations()

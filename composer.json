@@ -1,6 +1,6 @@
 {
     "name": "archielite/url-shortener",
-    "description": "",
+    "description": "This plugin allows you to create short URLs for your Botble CMS site.",
     "type": "botble-plugin",
     "require": {
         "geoip2/geoip2": "^v2.13.0"

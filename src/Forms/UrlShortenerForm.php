@@ -2,40 +2,42 @@
 
 namespace ArchiElite\UrlShortener\Forms;
 
-use Botble\Base\Enums\BaseStatusEnum;
-use Botble\Base\Forms\FormAbstract;
 use ArchiElite\UrlShortener\Http\Requests\UrlShortenerRequest;
 use ArchiElite\UrlShortener\Models\UrlShortener;
+use Botble\Base\Forms\FieldOptions\StatusFieldOption;
+use Botble\Base\Forms\FieldOptions\TextFieldOption;
+use Botble\Base\Forms\Fields\SelectField;
+use Botble\Base\Forms\Fields\TextField;
+use Botble\Base\Forms\FormAbstract;
 
 class UrlShortenerForm extends FormAbstract
 {
-    public function buildForm(): void
+    public function setup(): void
     {
         $this
-            ->setupModel(new UrlShortener())
+            ->model(UrlShortener::class)
             ->setValidatorClass(UrlShortenerRequest::class)
-            ->withCustomFields()
-            ->add('short_url', 'text', [
-                'label' => trans('plugins/url-shortener::url-shortener.alias'),
-                'required' => true,
-                'attr' => [
-                    'placeholder' => __('Ex: botble'),
-                    'data-counter' => 15,
-                ],
-            ])
-            ->add('long_url', 'text', [
-                'label' => trans('plugins/url-shortener::url-shortener.target_url'),
-                'required' => true,
-                'attr' => [
-                    'placeholder' => __('Ex: https://google.com'),
-                    'data-counter' => 255,
-                ],
-            ])
-            ->add('status', 'customSelect', [
-                'label' => trans('core/base::tables.status'),
-                'label_attr' => ['class' => 'control-label required'],
-                'choices' => BaseStatusEnum::labels(),
-            ])
+            ->add(
+                'short_url',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(trans('plugins/url-shortener::url-shortener.alias'))
+                    ->required()
+                    ->maxLength(30)
+                    ->placeholder(__('Ex: botble'))
+                    ->toArray()
+            )
+            ->add(
+                'long_url',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label(trans('plugins/url-shortener::url-shortener.target_url'))
+                    ->required()
+                    ->maxLength(255)
+                    ->placeholder(__('Ex: https://google.com'))
+                    ->toArray()
+            )
+            ->add('status', SelectField::class, StatusFieldOption::make()->toArray())
             ->setBreakFieldPoint('status');
     }
 }
