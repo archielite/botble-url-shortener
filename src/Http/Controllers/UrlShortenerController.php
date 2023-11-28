@@ -8,12 +8,11 @@ use Botble\Base\Http\Controllers\BaseController;
 use ArchiElite\UrlShortener\Forms\UrlShortenerForm;
 use ArchiElite\UrlShortener\Http\Requests\UrlShortenerRequest;
 use ArchiElite\UrlShortener\Models\UrlShortener;
-use ArchiElite\UrlShortener\Repositories\Interfaces\UrlShortenerInterface;
 use Illuminate\Support\Str;
 
 class UrlShortenerController extends BaseController
 {
-    public function __construct(protected UrlShortenerInterface $shortUrlRepository)
+    public function __construct()
     {
         $this
             ->breadcrumb()

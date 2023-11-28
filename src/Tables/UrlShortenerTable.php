@@ -58,7 +58,8 @@ class UrlShortenerTable extends TableAbstract
                         }
 
                         return route('url_shortener.go', $item->short_url);
-                    }),
+                    })
+                ,
                 FormattedColumn::make('clicks')
                     ->getValueUsing(function (FormattedColumn $column): int {
                         $item = $column->getItem();
