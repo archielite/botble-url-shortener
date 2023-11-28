@@ -16,16 +16,16 @@ class UrlShortenerForm extends FormAbstract
             ->setValidatorClass(UrlShortenerRequest::class)
             ->withCustomFields()
             ->add('short_url', 'text', [
-                'label' => __('Alias'),
-                'label_attr' => ['class' => 'control-label required'],
+                'label' => trans('plugins/url-shortener::url-shortener.alias'),
+                'required' => true,
                 'attr' => [
                     'placeholder' => __('Ex: botble'),
                     'data-counter' => 15,
                 ],
             ])
             ->add('long_url', 'text', [
-                'label' => __('Target URL'),
-                'label_attr' => ['class' => 'control-label required'],
+                'label' => trans('plugins/url-shortener::url-shortener.target_url'),
+                'required' => true,
                 'attr' => [
                     'placeholder' => __('Ex: https://google.com'),
                     'data-counter' => 255,
