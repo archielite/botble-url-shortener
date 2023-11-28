@@ -6,7 +6,7 @@ This plugin allows you to create short URLs for your Botble CMS site.
 
 ## Requirements
 
-- Botble core 6.5.5 or higher.
+- Botble core 7.0.0 or higher.
 
 ## Installation
 

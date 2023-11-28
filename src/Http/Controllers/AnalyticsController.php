@@ -2,19 +2,25 @@
 
 namespace ArchiElite\UrlShortener\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Botble\Base\Enums\BaseStatusEnum;
 use ArchiElite\UrlShortener\Models\Analytics;
 use ArchiElite\UrlShortener\Models\UrlShortener;
 use Botble\Base\Facades\Assets;
-use Botble\Base\Facades\PageTitle;
+use Botble\Base\Http\Controllers\BaseController;
 use Exception;
 use GeoIp2\Database\Reader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
-class AnalyticsController extends Controller
+class AnalyticsController extends BaseController
 {
+    public function __construct()
+    {
+        $this
+            ->breadcrumb()
+            ->add(trans('plugins/url-shortener::url-shortener.name'), route('url_shortener.index'));
+    }
+
     public function view($url, Request $request)
     {
         $result = UrlShortener::where('short_url', $url)->where('status', BaseStatusEnum::PUBLISHED)->first();
@@ -83,7 +89,7 @@ class AnalyticsController extends Controller
 
     public function show($url)
     {
-        PageTitle::setTitle(trans('plugins/url-shortener::analytics.show.title', ['name' => $url]));
+        $this->pageTitle(trans('plugins/url-shortener::analytics.show.title', ['name' => $url]));
 
         $shortUrl = UrlShortener::where('short_url', $url)->firstOrFail();
 

@@ -2,20 +2,13 @@
 
 namespace ArchiElite\UrlShortener\Http\Controllers;
 
-use Botble\Base\Events\BeforeEditContentEvent;
-use Botble\Base\Events\CreatedContentEvent;
-use Botble\Base\Events\DeletedContentEvent;
-use Botble\Base\Events\UpdatedContentEvent;
-use Botble\Base\Forms\FormBuilder;
+use ArchiElite\UrlShortener\Tables\UrlShortenerTable;
+use Botble\Base\Http\Actions\DeleteResourceAction;
 use Botble\Base\Http\Controllers\BaseController;
-use Botble\Base\Http\Responses\BaseHttpResponse;
 use ArchiElite\UrlShortener\Forms\UrlShortenerForm;
 use ArchiElite\UrlShortener\Http\Requests\UrlShortenerRequest;
 use ArchiElite\UrlShortener\Models\UrlShortener;
 use ArchiElite\UrlShortener\Repositories\Interfaces\UrlShortenerInterface;
-use ArchiElite\UrlShortener\Tables\UrlShortenerTable;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class UrlShortenerController extends BaseController
@@ -43,60 +36,59 @@ class UrlShortenerController extends BaseController
 
     public function store(UrlShortenerRequest $request)
     {
-        $shortUrl = $request->input('short_url');
-        if (empty($shortUrl)) {
-            do {
-                $shortUrl = Str::random(6);
-            } while (UrlShortener::where('short_url', $shortUrl)->first());
-        }
+        $form =  UrlShortenerForm::create();
 
-        $shortUrl = $this->shortUrlRepository->createOrUpdate([
-            'long_url' => $request->input('long_url'),
-            'short_url' => $shortUrl,
-            'user_id' => $request->user()->getKey(),
-            'status' => $request->input('status'),
-        ]);
+        $form->saving(function (UrlShortenerForm $form) use ($request) {
+            $shortUrl = $request->input('short_url');
+            if (empty($shortUrl)) {
+                do {
+                    $shortUrl = Str::random(6);
+                } while (UrlShortener::where('short_url', $shortUrl)->first());
+            }
 
-        event(new CreatedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $shortUrl));
+            $data = $form->getRequestData();
+            $data['short_url'] = $shortUrl;
+            $data['user_id'] = $request->user()->getKey();
+
+            $form
+                ->getModel()
+                ->fill($data)
+                ->save();
+        });
 
         return $this
             ->httpResponse()
             ->setPreviousUrl(route('url_shortener.index'))
-            ->setNextUrl(route('url_shortener.edit', $shortUrl->id))
+            ->setNextUrl(route('url_shortener.edit', $form->getModel()->getKey()))
             ->setMessage(trans('core/base::notices.create_success_message'));
     }
 
-    public function edit($id, FormBuilder $formBuilder, Request $request)
+    public function edit(UrlShortener $urlShortener)
     {
-        $shortUrl = $this->shortUrlRepository->findOrFail($id);
+        $this->pageTitle(trans('plugins/url-shortener::url-shortener.edit', ['name' => $urlShortener->short_url]));
 
-        event(new BeforeEditContentEvent($request, $shortUrl));
-
-        $this->pageTitle(trans('plugins/url-shortener::url-shortener.edit', ['name' => $shortUrl->short_url]));
-
-        return $formBuilder->create(UrlShortenerForm::class, ['model' => $shortUrl])->renderForm();
+        return UrlShortenerForm::createFromModel($urlShortener)->renderForm();
     }
 
-    public function update($id, UrlShortenerRequest $request)
+    public function update(UrlShortener $urlShortener, UrlShortenerRequest $request)
     {
-        $url = $this->shortUrlRepository->findOrFail($id);
+        UrlShortenerForm::createFromModel($urlShortener)
+            ->saving(function (UrlShortenerForm $form) use ($urlShortener, $request) {
+                $shortUrl = $request->input('short_url');
+                if (empty($shortUrl)) {
+                    do {
+                        $shortUrl = Str::random(6);
+                    } while (UrlShortener::where('short_url', $shortUrl)->where('id', '!=', $urlShortener->id)->exists());
+                }
 
-        $shortUrl = $request->input('short_url');
-        if (empty($shortUrl)) {
-            do {
-                $shortUrl = Str::random(6);
-            } while (UrlShortener::where('short_url', $shortUrl)->where('id', '!=', $url->id)->exists());
-        }
+                $data = $form->getRequestData();
+                $data['short_url'] = $shortUrl;
 
-        $url->fill([
-            'long_url' => $request->input('long_url'),
-            'short_url' => $shortUrl,
-            'status' => $request->input('status'),
-        ]);
-
-        $this->shortUrlRepository->createOrUpdate($url);
-
-        event(new UpdatedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $url));
+                $form
+                    ->getModel()
+                    ->fill($data)
+                    ->save();
+        });
 
         return $this
             ->httpResponse()
@@ -104,42 +96,8 @@ class UrlShortenerController extends BaseController
             ->setMessage(trans('core/base::notices.update_success_message'));
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(UrlShortener $urlShortener)
     {
-        try {
-            $shortUrl = $this->shortUrlRepository->findOrFail($id);
-
-            $this->shortUrlRepository->delete($shortUrl);
-
-            event(new DeletedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $shortUrl));
-
-            return $this
-                ->httpResponse()
-                ->setMessage(trans('core/base::notices.delete_success_message'));
-        } catch (Exception) {
-            return $this
-                ->httpResponse()
-                ->setError()
-                ->setMessage(trans('core/base::notices.cannot_delete'));
-        }
-    }
-
-    public function deletes(Request $request)
-    {
-        $ids = $request->input('ids');
-        if (empty($ids)) {
-            return $this
-                ->httpResponse()
-                ->setError()
-                ->setMessage(trans('core/base::notices.no_select'));
-        }
-
-        foreach ($ids as $id) {
-            $shortUrl = $this->shortUrlRepository->findOrFail($id);
-            $this->shortUrlRepository->delete($shortUrl);
-            event(new DeletedContentEvent(URL_SHORTENER_MODULE_SCREEN_NAME, $request, $shortUrl));
-        }
-
-        return $response->setMessage(trans('core/base::notices.delete_success_message'));
+        return DeleteResourceAction::make($urlShortener);
     }
 }

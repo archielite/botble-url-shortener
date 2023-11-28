@@ -12,12 +12,6 @@ Route::group([
         Route::group(['prefix' => 'url-shortener'], function () {
             Route::resource('', 'UrlShortenerController')->parameters(['' => 'url_shortener']);
 
-            Route::delete('items/destroy', [
-                'as' => 'deletes',
-                'uses' => 'UrlShortenerController@deletes',
-                'permission' => 'url_shortener.destroy',
-            ]);
-
             Route::get('analytics/{url}', 'AnalyticsController@show')->name('analytics');
         });
     });

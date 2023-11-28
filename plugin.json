@@ -7,5 +7,5 @@
     "url": "https://archielite.com",
     "version": "1.0.0",
     "description": "URL shortener to reduce a long link.",
-    "minimum_core_version": "6.5.5"
+    "minimum_core_version": "7.0.0"
 }
