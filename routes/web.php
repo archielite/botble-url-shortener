@@ -3,7 +3,6 @@
 use ArchiElite\UrlShortener\Http\Controllers\AnalyticsController;
 use ArchiElite\UrlShortener\Http\Controllers\UrlShortenerController;
 use Botble\Base\Facades\AdminHelper;
-use Botble\Theme\Facades\Theme;
 use Illuminate\Support\Facades\Route;
 
 AdminHelper::registerRoutes(function () {
@@ -13,6 +12,6 @@ AdminHelper::registerRoutes(function () {
     });
 });
 
-Theme::registerRoutes(function () {
+Route::group(['middleware' => ['web', 'core']], function () {
     Route::get('go/{url}', [AnalyticsController::class, 'view'])->name('url_shortener.go');
 });

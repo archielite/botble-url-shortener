@@ -5,6 +5,7 @@ namespace ArchiElite\UrlShortener\Http\Controllers;
 use ArchiElite\UrlShortener\Models\Analytics;
 use ArchiElite\UrlShortener\Models\UrlShortener;
 use Botble\Base\Facades\Assets;
+use Botble\Base\Facades\BaseHelper;
 use Botble\Base\Http\Controllers\BaseController;
 use Exception;
 use GeoIp2\Database\Reader;
@@ -28,7 +29,7 @@ class AnalyticsController extends BaseController
             ->first();
 
         if (! $result) {
-            return redirect()->route('public.index');
+            return redirect()->to(BaseHelper::getHomepageUrl());
         }
 
         $externalUrl = $result['long_url'];
