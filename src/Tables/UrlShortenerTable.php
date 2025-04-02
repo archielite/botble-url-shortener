@@ -31,11 +31,13 @@ class UrlShortenerTable extends TableAbstract
                     ->urlUsing(function (LinkableColumn $column) {
                         return route('url_shortener.edit', $column->getItem()->getKey());
                     })
+                    ->limit(50)
                     ->label(trans('plugins/url-shortener::url-shortener.url')),
                 LinkableColumn::make('short_url')
                     ->urlUsing(function (LinkableColumn $column) {
                         return route('url_shortener.go', $column->getItem()->short_url);
                     })
+                    ->limit(50)
                     ->label(trans('plugins/url-shortener::url-shortener.name'))
                     ->copyable()
                     ->copyableState(function (LinkableColumn $column) {
