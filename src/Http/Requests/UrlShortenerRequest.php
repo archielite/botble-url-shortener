@@ -12,7 +12,7 @@ class UrlShortenerRequest extends Request
     public function rules(): array
     {
         return [
-            'long_url' => ['required', 'url', 'max:255'],
+            'long_url' => ['required', 'url', 'max:1000'],
             'short_url' => [
                 'nullable',
                 'min:4',
