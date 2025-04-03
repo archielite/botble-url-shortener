@@ -33,7 +33,7 @@ class UrlShortenerForm extends FormAbstract
                 TextFieldOption::make()
                     ->label(trans('plugins/url-shortener::url-shortener.target_url'))
                     ->required()
-                    ->maxLength(255)
+                    ->maxLength(1000)
                     ->placeholder(__('Ex: https://google.com'))
                     ->toArray()
             )
