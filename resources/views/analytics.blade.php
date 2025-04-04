@@ -9,46 +9,58 @@
             <p>{{ trans('plugins/url-shortener::analytics.created_at', ['date' => $creationDate]) }}</p>
             <div class="row">
                 <div class="mb-3 widget-item col-md-4">
-                    <div class="h-100 bg-white-opacity position-relative">
-                        <div class="d-flex p-2 pt-3 position-relative">
-                            <div class="block-left d-flex mr-1">
-                                <span class="align-self-center bg-white p-1">
-                                    <i class="fa-solid fa-arrow-pointer fa-2x m-2"></i>
-                                </span>
-                            </div>
-                            <div class="block-content mx-3">
-                                <p class="mb-1">{{ trans('plugins/url-shortener::analytics.click.clicks') }}</p>
-                                <h5>{{ $clicks }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3 widget-item col-md-4">
-                    <div class="h-100 bg-white-opacity position-relative">
-                        <div class="d-flex p-2 pt-3 position-relative">
-                            <div class="block-left d-flex mr-1">
-                                <span class="align-self-center bg-white p-1">
-                                    <i class="fa fa-hand-pointer fa-2x m-2"></i>
-                                </span>
-                            </div>
-                            <div class="block-content mx-3">
-                                <p class="mb-1">{{ trans('plugins/url-shortener::analytics.click.reals') }}</p>
-                                <h5>{{ $realClicks }}</h5>
+                    <div class="card analytic-card">
+                        <div class="card-body p-3">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <x-core::icon name="ti ti-click"  class="icon-md text-white bg-info bg-azure rounded p-1" />
+                                </div>
+                                <div class="col mt-0">
+                                    <p class="text-secondary mb-0 fs-4">
+                                        {{ trans('plugins/url-shortener::analytics.click.clicks') }}
+                                    </p>
+                                    <h3 class="mb-n1 fs-1">
+                                        {{ number_format($clicks) }}
+                                    </h3>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="mb-3 widget-item col-md-4">
-                    <div class="h-100 bg-white-opacity position-relative">
-                        <div class="d-flex p-2 pt-3 position-relative">
-                            <div class="block-left d-flex mr-1">
-                                <span class="align-self-center bg-white p-1">
-                                    <i class="fas fa-clock fa-2x m-2"></i>
-                                </span>
+                    <div class="card analytic-card">
+                        <div class="card-body p-3">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <x-core::icon name="ti ti-hand-click"  class="icon-md text-white bg-green bg-azure rounded p-1" />
+                                </div>
+                                <div class="col mt-0">
+                                    <p class="text-secondary mb-0 fs-4">
+                                        {{ trans('plugins/url-shortener::analytics.click.reals') }}
+                                    </p>
+                                    <h3 class="mb-n1 fs-1">
+                                        {{ number_format($realClicks) }}
+                                    </h3>
+                                </div>
                             </div>
-                            <div class="block-content mx-3">
-                                <p class="mb-1">{{ trans('plugins/url-shortener::analytics.click.today') }}</p>
-                                <h5>{{ $todayClicks }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 widget-item col-md-4">
+                    <div class="card analytic-card">
+                        <div class="card-body p-3">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <x-core::icon name="ti ti-clock-24"  class="icon-md text-white bg-primary bg-azure rounded p-1" />
+                                </div>
+                                <div class="col mt-0">
+                                    <p class="text-secondary mb-0 fs-4">
+                                        {{ trans('plugins/url-shortener::analytics.click.today') }}
+                                    </p>
+                                    <h3 class="mb-n1 fs-1">
+                                        {{ number_format($todayClicks) }}
+                                    </h3>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -46,7 +46,10 @@ class UrlShortenerTable extends TableAbstract
                 FormattedColumn::make('clicks')
                     ->getValueUsing(function (FormattedColumn $column): int {
                         return Analytics::getClicks($column->getItem()->short_url);
-                    }),
+                    })
+                    ->withEmptyState()
+                    ->orderable(false)
+                    ->searchable(false),
                 CreatedAtColumn::make(),
                 StatusColumn::make(),
             ])
