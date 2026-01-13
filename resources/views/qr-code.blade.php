@@ -2,12 +2,13 @@
 @section('content')
     <div class="row">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
+            <x-core::card>
+                <x-core::card.header>
                     <h4 class="card-title"><i class="fas fa-qrcode"></i>
                         {{ trans('plugins/url-shortener::qr-code.qr_code_generator') }}</h4>
-                </div>
-                <div class="card-body">
+                </x-core::card.header>
+
+                <x-core::card.body>
                     <x-core::form.text-input id="short-url" name="short_url"
                         label="{{ trans('plugins/url-shortener::qr-code.short_url') }}" value="{{ $fullUrl }}" readonly>
                         <x-slot name="append">
@@ -77,27 +78,27 @@
                             <i class="fas fa-trash"></i> {{ trans('plugins/url-shortener::qr-code.clear_cache') }}
                         </button>
                     </div>
-                </div>
-            </div>
+                </x-core::card.body>
+            </x-core::card>
         </div>
 
         <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-header">
+            <x-core::card class="mb-3">
+                <x-core::card.header>
                     <h4 class="card-title">{{ trans('plugins/url-shortener::qr-code.preview') }}</h4>
-                </div>
-                <div class="card-body text-center">
+                </x-core::card.header>
+                <x-core::card.body class="text-center">
                     <img src="{{ $qrCodeUrl }}" id="qr-image" class="img-fluid border p-2" alt="QR Code">
                     <div class="mt-2"><small
                             class="text-muted">{{ trans('plugins/url-shortener::qr-code.scan_info') }}</small></div>
-                </div>
-            </div>
+                </x-core::card.body>
+            </x-core::card>
 
-            <div class="card">
-                <div class="card-header">
+            <x-core::card>
+                <x-core::card.header>
                     <h4 class="card-title">{{ trans('plugins/url-shortener::qr-code.url_info') }}</h4>
-                </div>
-                <div class="card-body">
+                </x-core::card.header>
+                <x-core::card.body>
                     <dl class="row mb-0">
                         <dt class="col-sm-5">{{ trans('plugins/url-shortener::url-shortener.alias') }}:</dt>
                         <dd class="col-sm-7">{{ $urlShortener->short_url }}</dd>
@@ -116,8 +117,8 @@
                             <dd class="col-sm-7">{{ $urlShortener->expired_at->format('Y-m-d H:i') }}</dd>
                         @endif
                     </dl>
-                </div>
-            </div>
+                </x-core::card.body>
+            </x-core::card>
         </div>
     </div>
 @endsection
