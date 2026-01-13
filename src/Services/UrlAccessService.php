@@ -37,7 +37,7 @@ class UrlAccessService
     public function addRule(UrlAccessRuleInterface $rule): self
     {
         $this->rules[] = $rule;
-        
+
         // Sort rules by priority
         usort($this->rules, function ($a, $b) {
             return $a->getPriority() <=> $b->getPriority();
@@ -56,7 +56,7 @@ class UrlAccessService
     {
         foreach ($this->rules as $rule) {
             $result = $rule->check($urlShortener);
-            
+
             if (! $result['passed']) {
                 return [
                     'accessible' => false,
