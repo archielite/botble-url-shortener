@@ -4,6 +4,7 @@ namespace ArchiElite\UrlShortener\Http\Controllers;
 
 use ArchiElite\UrlShortener\Models\Analytics;
 use ArchiElite\UrlShortener\Models\UrlShortener;
+use ArchiElite\UrlShortener\Services\UrlAccessService;
 use Botble\Base\Facades\Assets;
 use Botble\Base\Facades\BaseHelper;
 use Botble\Base\Http\Controllers\BaseController;
@@ -21,7 +22,7 @@ class AnalyticsController extends BaseController
             ->add(trans('plugins/url-shortener::url-shortener.name'), route('url_shortener.index'));
     }
 
-    public function view($url, Request $request)
+    public function view($url, Request $request, UrlAccessService $urlAccessService)
     {
         $result = UrlShortener::query()
             ->wherePublished()
@@ -29,6 +30,12 @@ class AnalyticsController extends BaseController
             ->first();
 
         if (! $result) {
+            return redirect()->to(BaseHelper::getHomepageUrl());
+        }
+
+        $accessCheck = $urlAccessService->canAccess($result);
+
+        if (! $accessCheck['accessible']) {
             return redirect()->to(BaseHelper::getHomepageUrl());
         }
 

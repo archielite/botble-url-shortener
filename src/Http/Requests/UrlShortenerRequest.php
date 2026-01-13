@@ -21,6 +21,8 @@ class UrlShortenerRequest extends Request
                 Rule::unique(UrlShortener::class, 'short_url')->ignore($this->route('url_shortener')),
             ],
             'status' => Rule::in(BaseStatusEnum::values()),
+            'expired_at' => ['nullable', 'date', 'after:now'],
+            'max_clicks' => ['nullable', 'integer', 'min:1'],
         ];
     }
 }

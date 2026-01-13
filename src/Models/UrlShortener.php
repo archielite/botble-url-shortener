@@ -14,9 +14,19 @@ class UrlShortener extends BaseModel
         'short_url',
         'user_id',
         'status',
+        'expired_at',
+        'max_clicks',
     ];
 
     protected $casts = [
         'status' => BaseStatusEnum::class,
+        'expired_at' => 'datetime',
+        'max_clicks' => 'integer',
     ];
+
+    public function isExpired(): bool
+    {
+        return $this->expired_at !== null
+            && $this->expired_at->isPast();
+    }
 }
