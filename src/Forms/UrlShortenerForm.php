@@ -50,6 +50,7 @@ class UrlShortenerForm extends FormAbstract
                     ->placeholder(trans('plugins/url-shortener::url-shortener.expired_at_helper'))
                     ->helperText(trans('plugins/url-shortener::url-shortener.expired_at_helper'))
                     ->withTimePicker()
+                    ->defaultValue(null)
                     ->toArray()
             )
             ->add(
