@@ -12,5 +12,6 @@ return [
     'expired_at' => 'Expiration Date',
     'expired_at_helper' => 'Select when this URL should expire (leave empty for no expiration)',
     'max_clicks' => 'Maximum Clicks',
+    'max_clicks_min' => 'The :attribute must be greater than or equal to current clicks (:current).',
     'max_clicks_helper' => 'Maximum number of times this URL can be accessed (leave empty for unlimited)',
 ];
