@@ -54,6 +54,14 @@ class UrlShortenerTable extends TableAbstract
                 StatusColumn::make(),
             ])
             ->addActions([
+                Action::make('qr-code')
+                    ->color('success')
+                    ->icon('ti ti-qrcode')
+                    ->label(trans('plugins/url-shortener::qr-code.qr_code'))
+                    ->permission('url_shortener.index')
+                    ->url(function (Action $action) {
+                        return route('url_shortener.qr-code.show', $action->getItem()->short_url);
+                    }),
                 Action::make('analytics')
                     ->color('info')
                     ->icon('ti ti-brand-google-analytics')
