@@ -1,131 +1,99 @@
-@extends(BaseHelper::getAdminMasterLayoutTemplate())
-
+@extends('core/base::layouts.master')
 @section('content')
     <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">
-                        <i class="fas fa-qrcode"></i>
-                        {{ trans('plugins/url-shortener::qr-code.qr_code_generator') }}
-                    </h4>
+                    <h4 class="card-title"><i class="fas fa-qrcode"></i>
+                        {{ trans('plugins/url-shortener::qr-code.qr_code_generator') }}</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.short_url') }}</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" value="{{ $fullUrl }}" readonly>
-                                    <button type="button" class="btn btn-secondary" onclick="copyToClipboard('{{ $fullUrl }}')">
-                                        <i class="fas fa-copy"></i> {{ trans('plugins/url-shortener::qr-code.copy') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.size') }}</label>
-                                <select class="form-control" id="qr-size">
-                                    @foreach($availableSizes as $value => $label)
-                                        <option value="{{ $value }}" @selected($value === '300x300')>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.error_correction') }}</label>
-                                <select class="form-control" id="qr-ecc">
-                                    @foreach($errorCorrectionLevels as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.format') }}</label>
-                                <select class="form-control" id="qr-format">
-                                    @foreach($availableFormats as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.margin') }}</label>
-                                <input type="number" class="form-control" id="qr-margin" value="1" min="0" max="50">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.foreground_color') }}</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" id="qr-color-picker" value="#000000">
-                                    <input type="text" class="form-control" id="qr-color" value="0-0-0" placeholder="0-0-0">
-                                </div>
-                                <small class="form-text text-muted">{{ trans('plugins/url-shortener::qr-code.color_format_help') }}</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label class="form-label">{{ trans('plugins/url-shortener::qr-code.background_color') }}</label>
-                                <div class="input-group">
-                                    <input type="color" class="form-control form-control-color" id="qr-bgcolor-picker" value="#FFFFFF">
-                                    <input type="text" class="form-control" id="qr-bgcolor" value="255-255-255" placeholder="255-255-255">
-                                </div>
-                                <small class="form-text text-muted">{{ trans('plugins/url-shortener::qr-code.color_format_help') }}</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-primary" id="generate-qr-btn">
-                                <i class="fas fa-sync"></i> {{ trans('plugins/url-shortener::qr-code.generate') }}
+                    <x-core::form.text-input id="short-url" name="short_url"
+                        label="{{ trans('plugins/url-shortener::qr-code.short_url') }}" value="{{ $fullUrl }}" readonly>
+                        <x-slot name="append">
+                            <button type="button" class="btn btn-secondary" id="copy-btn">
+                                <i class="fas fa-copy"></i> {{ trans('plugins/url-shortener::qr-code.copy') }}
                             </button>
-                            <button type="button" class="btn btn-success" id="download-qr-btn">
-                                <i class="fas fa-download"></i> {{ trans('plugins/url-shortener::qr-code.download') }}
-                            </button>
-                            <button type="button" class="btn btn-warning" id="clear-cache-btn">
-                                <i class="fas fa-trash"></i> {{ trans('plugins/url-shortener::qr-code.clear_cache') }}
-                            </button>
+                        </x-slot>
+                    </x-core::form.text-input>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-core::form.select id="qr-size" name="qr_size"
+                                label="{{ trans('plugins/url-shortener::qr-code.size') }}">
+                                @foreach ($availableSizes as $value => $label)
+                                    <option value="{{ $value }}" @selected($value === '300x300')>{{ $label }}
+                                    </option>
+                                @endforeach
+                            </x-core::form.select>
                         </div>
+                        <div class="col-md-6">
+                            <x-core::form.select id="qr-ecc" name="qr_ecc"
+                                label="{{ trans('plugins/url-shortener::qr-code.error_correction') }}">
+                                @foreach ($errorCorrectionLevels as $value => $label)
+                                    <option value="{{ $value }}">{{ $label }}</option>
+                                @endforeach
+                            </x-core::form.select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-core::form.select id="qr-format" name="qr_format"
+                                label="{{ trans('plugins/url-shortener::qr-code.format') }}">
+                                @foreach ($availableFormats as $value => $label)
+                                    <option value="{{ $value }}">{{ $label }}</option>
+                                @endforeach
+                            </x-core::form.select>
+                        </div>
+                        <div class="col-md-6">
+                            <x-core::form.text-input id="qr-margin" name="qr_margin" type="number" value="1"
+                                min="0" max="50"
+                                label="{{ trans('plugins/url-shortener::qr-code.margin') }}" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <x-core::form.color-picker id="qr-color" name="qr_color"
+                                label="{{ trans('plugins/url-shortener::qr-code.foreground_color') }}" value="0-0-0"
+                                help="{{ trans('plugins/url-shortener::qr-code.color_format_help') }}" />
+                        </div>
+                        <div class="col-md-6">
+                            <x-core::form.color-picker id="qr-bgcolor" name="qr_bgcolor"
+                                label="{{ trans('plugins/url-shortener::qr-code.background_color') }}" value="255-255-255"
+                                help="{{ trans('plugins/url-shortener::qr-code.color_format_help') }}" />
+                        </div>
+                    </div>
+
+                    <div class="mt-3 d-flex gap-2 flex-wrap">
+                        <button type="button" class="btn btn-primary" id="generate-qr-btn">
+                            <i class="fas fa-sync"></i> {{ trans('plugins/url-shortener::qr-code.generate') }}
+                        </button>
+                        <button type="button" class="btn btn-success" id="download-qr-btn">
+                            <i class="fas fa-download"></i> {{ trans('plugins/url-shortener::qr-code.download') }}
+                        </button>
+                        <button type="button" class="btn btn-warning" id="clear-cache-btn">
+                            <i class="fas fa-trash"></i> {{ trans('plugins/url-shortener::qr-code.clear_cache') }}
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header">
                     <h4 class="card-title">{{ trans('plugins/url-shortener::qr-code.preview') }}</h4>
                 </div>
                 <div class="card-body text-center">
-                    <div id="qr-preview">
-                        <img src="{{ $qrCodeUrl }}" alt="QR Code" class="img-fluid" id="qr-image" style="max-width: 100%; border: 1px solid #ddd; padding: 10px;">
-                    </div>
-                    <div class="mt-3">
-                        <small class="text-muted">{{ trans('plugins/url-shortener::qr-code.scan_info') }}</small>
-                    </div>
+                    <img src="{{ $qrCodeUrl }}" id="qr-image" class="img-fluid border p-2" alt="QR Code">
+                    <div class="mt-2"><small
+                            class="text-muted">{{ trans('plugins/url-shortener::qr-code.scan_info') }}</small></div>
                 </div>
             </div>
 
-            <div class="card mt-3">
+            <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">{{ trans('plugins/url-shortener::qr-code.url_info') }}</h4>
                 </div>
@@ -136,15 +104,14 @@
 
                         <dt class="col-sm-5">{{ trans('plugins/url-shortener::url-shortener.target_url') }}:</dt>
                         <dd class="col-sm-7">
-                            <a href="{{ $urlShortener->long_url }}" target="_blank" class="text-truncate d-block">
-                                {{ Str::limit($urlShortener->long_url, 30) }}
-                            </a>
+                            <a href="{{ $urlShortener->long_url }}" target="_blank"
+                                class="text-truncate d-block">{{ Str::limit($urlShortener->long_url, 30) }}</a>
                         </dd>
 
                         <dt class="col-sm-5">{{ trans('core/base::tables.status') }}:</dt>
                         <dd class="col-sm-7">{!! $urlShortener->status->toHtml() !!}</dd>
 
-                        @if($urlShortener->expired_at)
+                        @if ($urlShortener->expired_at)
                             <dt class="col-sm-5">{{ trans('plugins/url-shortener::url-shortener.expired_at') }}:</dt>
                             <dd class="col-sm-7">{{ $urlShortener->expired_at->format('Y-m-d H:i') }}</dd>
                         @endif
@@ -159,140 +126,246 @@
     <script>
         'use strict';
 
-        const shortUrl = '{{ $urlShortener->short_url }}';
-        const generateUrl = '{{ route('url_shortener.qr-code.generate', $urlShortener->short_url) }}';
-        const downloadBaseUrl = '{{ route('url_shortener.qr-code.download', $urlShortener->short_url) }}';
-        const clearCacheUrl = '{{ route('url_shortener.qr-code.clear-cache', $urlShortener->short_url) }}';
+        (function($) {
+            const generateUrl = '{{ route('url_shortener.qr-code.generate', $urlShortener->short_url) }}';
+            const downloadBaseUrl = '{{ route('url_shortener.qr-code.download', $urlShortener->short_url) }}';
+            const clearCacheUrl = '{{ route('url_shortener.qr-code.clear-cache', $urlShortener->short_url) }}';
 
-        function hexToRgb(hex) {
-            hex = hex.replace('#', '');
-            const r = parseInt(hex.substr(0, 2), 16);
-            const g = parseInt(hex.substr(2, 2), 16);
-            const b = parseInt(hex.substr(4, 2), 16);
-            return `${r}-${g}-${b}`;
-        }
-
-        function rgbToHex(rgb) {
-            const parts = rgb.split('-');
-            const r = parseInt(parts[0]).toString(16).padStart(2, '0');
-            const g = parseInt(parts[1]).toString(16).padStart(2, '0');
-            const b = parseInt(parts[2]).toString(16).padStart(2, '0');
-            return `#${r}${g}${b}`;
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                Botble.showSuccess('{{ trans('plugins/url-shortener::qr-code.copied') }}');
-            });
-        }
-
-        function getQrOptions() {
-            return {
-                size: $('#qr-size').val(),
-                ecc: $('#qr-ecc').val(),
-                format: $('#qr-format').val(),
-                color: $('#qr-color').val(),
-                bgcolor: $('#qr-bgcolor').val(),
-                margin: $('#qr-margin').val(),
-                qzone: 1
-            };
-        }
-
-        function generateQrCode() {
-            const options = getQrOptions();
-            const $btn = $('#generate-qr-btn');
-            const originalText = $btn.html();
-
-            $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> {{ trans('plugins/url-shortener::qr-code.generating') }}');
-
-            $.ajax({
-                url: generateUrl,
-                method: 'POST',
-                data: options,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.error === false && response.data.url) {
-                        $('#qr-image').attr('src', response.data.url + '&t=' + Date.now());
-                        Botble.showSuccess('{{ trans('plugins/url-shortener::qr-code.generated_successfully') }}');
-                    } else {
-                        Botble.showError(response.message || '{{ trans('plugins/url-shortener::qr-code.generation_failed') }}');
-                    }
-                },
-                error: function(xhr) {
-                    const message = xhr.responseJSON?.message || '{{ trans('plugins/url-shortener::qr-code.generation_failed') }}';
-                    Botble.showError(message);
-                },
-                complete: function() {
-                    $btn.prop('disabled', false).html(originalText);
+            function rgbStringToFormat(rgbString) {
+                const match = rgbString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+                if (match) {
+                    return `${match[1]}-${match[2]}-${match[3]}`;
                 }
-            });
-        }
-
-        function downloadQrCode() {
-            const options = getQrOptions();
-            const params = new URLSearchParams(options);
-            window.location.href = `${downloadBaseUrl}?${params.toString()}`;
-            Botble.showSuccess('{{ trans('plugins/url-shortener::qr-code.download_started') }}');
-        }
-
-        function clearCache() {
-            if (!confirm('{{ trans('plugins/url-shortener::qr-code.clear_cache_confirm') }}')) {
-                return;
+                return rgbString;
             }
 
-            $.ajax({
-                url: clearCacheUrl,
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.error === false) {
-                        Botble.showSuccess(response.message);
-                        generateQrCode();
-                    } else {
-                        Botble.showError(response.message);
+            function hexToRgb(hex) {
+                hex = hex.replace('#', '');
+                const r = parseInt(hex.substr(0, 2), 16);
+                const g = parseInt(hex.substr(2, 2), 16);
+                const b = parseInt(hex.substr(4, 2), 16);
+                return `${r}-${g}-${b}`;
+            }
+
+            function rgbToHex(rgb) {
+                const parts = rgb.split('-').map(x => parseInt(x.trim()));
+                if (parts.length !== 3 || parts.some(isNaN)) {
+                    return '#000000';
+                }
+                const [r, g, b] = parts;
+                return '#' + [r, g, b].map(x => {
+                    const hex = Math.max(0, Math.min(255, x)).toString(16);
+                    return hex.padStart(2, '0');
+                }).join('');
+            }
+
+            function normalizeColorForAPI(colorValue) {
+                if (!colorValue) {
+                    return null;
+                }
+
+                if (/^\d{1,3}-\d{1,3}-\d{1,3}$/.test(colorValue)) {
+                    return colorValue;
+                }
+
+                if (colorValue.startsWith('rgb')) {
+                    return rgbStringToFormat(colorValue);
+                }
+
+                if (colorValue.startsWith('#')) {
+                    return hexToRgb(colorValue);
+                }
+
+                if (/^[a-fA-F0-9]{6}$/.test(colorValue) || /^[a-fA-F0-9]{3}$/.test(colorValue)) {
+                    return hexToRgb('#' + colorValue);
+                }
+
+                return colorValue;
+            }
+
+            function getColorValue(inputId) {
+                const value = $(`#${inputId}`).val();
+                const defaultColor = inputId === 'qr-color' ? '0-0-0' : '255-255-255';
+
+                if (!value) {
+                    return defaultColor;
+                }
+
+                return normalizeColorForAPI(value) || defaultColor;
+            }
+
+            function initColorPickers() {
+                $('#qr-color').val('0-0-0');
+                $('#qr-bgcolor').val('255-255-255');
+
+                $('#qr-color, #qr-bgcolor').on('change input', function() {
+                    generateQrCode();
+                });
+            }
+
+            function showCopiedFeedback($btn) {
+                const original = $btn.html();
+                $btn.html('<i class="fas fa-check"></i> Copied')
+                    .removeClass('btn-secondary')
+                    .addClass('btn-success');
+                setTimeout(() => {
+                    $btn.html(original)
+                        .removeClass('btn-success')
+                        .addClass('btn-secondary');
+                }, 2000);
+            }
+
+            function fallbackCopy(text, $btn) {
+                const $temp = $('<input>');
+                $('body').append($temp);
+                $temp.val(text).select();
+                try {
+                    document.execCommand('copy');
+                    showCopiedFeedback($btn);
+                } catch (err) {
+                    alert('Copy failed. Please copy manually: ' + text);
+                }
+                $temp.remove();
+            }
+
+            function getQrOptions() {
+                const color = getColorValue('qr-color');
+                const bgcolor = getColorValue('qr-bgcolor');
+
+                return {
+                    size: $('#qr-size').val() || '300x300',
+                    ecc: $('#qr-ecc').val() || 'M',
+                    format: $('#qr-format').val() || 'png',
+                    color: color,
+                    bgcolor: bgcolor,
+                    margin: $('#qr-margin').val() || '1',
+                    qzone: 1
+                };
+            }
+
+            function generateQrCode() {
+                const $btn = $('#generate-qr-btn');
+                const originalText = $btn.html();
+
+                $btn.prop('disabled', true)
+                    .html('<i class="fas fa-spinner fa-spin"></i> Generating...');
+
+                const options = getQrOptions();
+
+                $.ajax({
+                    url: generateUrl,
+                    method: 'POST',
+                    data: options,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        if (!res.error && res.data && res.data.url) {
+                            $('#qr-image').attr('src', res.data.url + '&t=' + Date.now());
+                            if (typeof Botble !== 'undefined' && Botble.showSuccess) {
+                                Botble.showSuccess(res.message || 'QR code generated successfully!');
+                            }
+                        } else {
+                            const errorMsg = res.message || 'Failed to generate QR code';
+                            if (typeof Botble !== 'undefined' && Botble.showError) {
+                                Botble.showError(errorMsg);
+                            } else {
+                                alert(errorMsg);
+                            }
+                        }
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON?.message ||
+                            'An error occurred while generating QR code';
+                        if (typeof Botble !== 'undefined' && Botble.showError) {
+                            Botble.showError(errorMsg);
+                        } else {
+                            alert(errorMsg);
+                        }
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false).html(originalText);
                     }
-                },
-                error: function(xhr) {
-                    const message = xhr.responseJSON?.message || '{{ trans('core/base::notices.error') }}';
-                    Botble.showError(message);
-                }
-            });
-        }
+                });
+            }
 
-        $(document).ready(function() {
-            $('#qr-color-picker').on('change', function() {
-                $('#qr-color').val(hexToRgb($(this).val()));
-            });
+            $('#copy-btn').on('click', function() {
+                const $btn = $(this);
+                const url = $('#short-url').val();
 
-            $('#qr-bgcolor-picker').on('change', function() {
-                $('#qr-bgcolor').val(hexToRgb($(this).val()));
-            });
-
-            $('#qr-color').on('change', function() {
-                const rgb = $(this).val();
-                if (/^\d{1,3}-\d{1,3}-\d{1,3}$/.test(rgb)) {
-                    $('#qr-color-picker').val(rgbToHex(rgb));
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        showCopiedFeedback($btn);
+                    }).catch(() => {
+                        fallbackCopy(url, $btn);
+                    });
+                } else {
+                    fallbackCopy(url, $btn);
                 }
             });
 
-            $('#qr-bgcolor').on('change', function() {
-                const rgb = $(this).val();
-                if (/^\d{1,3}-\d{1,3}-\d{1,3}$/.test(rgb)) {
-                    $('#qr-bgcolor-picker').val(rgbToHex(rgb));
+            $('#download-qr-btn').on('click', function() {
+                const options = getQrOptions();
+                const params = new URLSearchParams(options);
+                window.location.href = `${downloadBaseUrl}?${params.toString()}`;
+
+                if (typeof Botble !== 'undefined' && Botble.showSuccess) {
+                    Botble.showSuccess('Download started');
                 }
             });
 
-            $('#generate-qr-btn').on('click', generateQrCode);
-            $('#download-qr-btn').on('click', downloadQrCode);
-            $('#clear-cache-btn').on('click', clearCache);
+            $('#clear-cache-btn').on('click', function() {
+                if (!confirm('Are you sure you want to clear the QR code cache?')) {
+                    return;
+                }
 
-            $('#qr-size, #qr-ecc, #qr-format').on('change', function() {
+                const $btn = $(this);
+                const originalText = $btn.html();
+
+                $btn.prop('disabled', true)
+                    .html('<i class="fas fa-spinner fa-spin"></i> Clearing...');
+
+                $.ajax({
+                    url: clearCacheUrl,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        if (!res.error) {
+                            if (typeof Botble !== 'undefined' && Botble.showSuccess) {
+                                Botble.showSuccess(res.message || 'Cache cleared successfully');
+                            }
+                            generateQrCode();
+                        } else {
+                            if (typeof Botble !== 'undefined' && Botble.showError) {
+                                Botble.showError(res.message || 'Failed to clear cache');
+                            }
+                        }
+                    },
+                    error: function() {
+                        if (typeof Botble !== 'undefined' && Botble.showError) {
+                            Botble.showError('An error occurred while clearing cache');
+                        }
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false).html(originalText);
+                    }
+                });
+            });
+
+            $('#qr-size, #qr-ecc, #qr-format, #qr-margin').on('change', function() {
                 generateQrCode();
             });
-        });
+
+            $(document).ready(function() {
+                initColorPickers();
+
+                setTimeout(function() {
+                    $('#generate-qr-btn').trigger('click');
+                }, 500);
+            });
+
+        })(jQuery);
     </script>
 @endpush
