@@ -12,9 +12,9 @@
                     <x-core::form.text-input id="short-url" name="short_url"
                         label="{{ trans('plugins/url-shortener::qr-code.short_url') }}" value="{{ $fullUrl }}" readonly>
                         <x-slot name="append">
-                            <button type="button" class="btn btn-secondary" id="copy-btn">
+                            <x-core::button color="secondary" id="copy-btn">
                                 <i class="fas fa-copy"></i> {{ trans('plugins/url-shortener::qr-code.copy') }}
-                            </button>
+                            </x-core::button>
                         </x-slot>
                     </x-core::form.text-input>
 
@@ -68,15 +68,15 @@
                     </div>
 
                     <div class="mt-3 d-flex gap-2 flex-wrap">
-                        <button type="button" class="btn btn-primary" id="generate-qr-btn">
+                        <x-core::button color="primary" id="generate-qr-btn">
                             <i class="fas fa-sync"></i> {{ trans('plugins/url-shortener::qr-code.generate') }}
-                        </button>
-                        <button type="button" class="btn btn-success" id="download-qr-btn">
+                        </x-core::button>
+                        <x-core::button color="success" id="download-qr-btn">
                             <i class="fas fa-download"></i> {{ trans('plugins/url-shortener::qr-code.download') }}
-                        </button>
-                        <button type="button" class="btn btn-warning" id="clear-cache-btn">
+                        </x-core::button>
+                        <x-core::button color="warning" id="clear-cache-btn">
                             <i class="fas fa-trash"></i> {{ trans('plugins/url-shortener::qr-code.clear_cache') }}
-                        </button>
+                        </x-core::button>
                     </div>
                 </x-core::card.body>
             </x-core::card>
