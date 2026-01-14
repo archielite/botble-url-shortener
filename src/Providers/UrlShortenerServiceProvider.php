@@ -13,7 +13,7 @@ class UrlShortenerServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->setNamespace('plugins/url-shortener')
-            ->loadAndPublishConfigurations(['permissions'])
+            ->loadAndPublishConfigurations(['permissions', 'qr-code'])
             ->loadMigrations()
             ->loadAndPublishViews()
             ->loadAndPublishTranslations()
