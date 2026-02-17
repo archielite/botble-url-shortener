@@ -27,7 +27,9 @@ class UrlShortenerRequest extends Request
                 'nullable',
                 'integer',
                 'min:1',
-                new MaxClicksNotLessThanCurrent($this->route('url_shortener')->short_url),
+                ...($this->route('url_shortener')
+                    ? [new MaxClicksNotLessThanCurrent($this->route('url_shortener')->short_url)]
+                    : []),
             ],
         ];
     }
