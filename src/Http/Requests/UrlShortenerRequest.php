@@ -12,6 +12,16 @@ class UrlShortenerRequest extends Request
 {
     public function rules(): array
     {
+        $urlShortener = $this->route('url_shortener');
+
+        if ($urlShortener instanceof UrlShortener) {
+            $ignoreId = $urlShortener->getKey();
+            $currentShortUrl = $urlShortener->short_url;
+        } else {
+            $ignoreId = $urlShortener;
+            $currentShortUrl = null;
+        }
+
         return [
             'long_url' => ['required', 'url', 'max:1000'],
             'short_url' => [
@@ -19,7 +29,7 @@ class UrlShortenerRequest extends Request
                 'min:4',
                 'max:30',
                 'regex:/^(?=[^ ])[A-Za-z0-9-_]+$/',
-                Rule::unique(UrlShortener::class, 'short_url')->ignore($this->route('url_shortener')),
+                Rule::unique(UrlShortener::class, 'short_url')->ignore($ignoreId),
             ],
             'status' => Rule::in(BaseStatusEnum::values()),
             'expired_at' => ['nullable', 'date', 'after:now'],
@@ -27,8 +37,8 @@ class UrlShortenerRequest extends Request
                 'nullable',
                 'integer',
                 'min:1',
-                ...($this->route('url_shortener')
-                    ? [new MaxClicksNotLessThanCurrent($this->route('url_shortener')->short_url)]
+                ...($currentShortUrl
+                    ? [new MaxClicksNotLessThanCurrent($currentShortUrl)]
                     : []),
             ],
         ];

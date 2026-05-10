@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 AdminHelper::registerRoutes(function () {
     Route::group(['prefix' => 'url-shortener', 'as' => 'url_shortener.'], function () {
-        Route::resource('', UrlShortenerController::class)->parameters(['' => 'url-shortener']);
+        Route::resource('', UrlShortenerController::class)->parameters(['' => 'url_shortener']);
         Route::get('analytics/{url}', [AnalyticsController::class, 'show'])->name('analytics');
 
         Route::group(['prefix' => 'qr-code', 'as' => 'qr-code.'], function () {
